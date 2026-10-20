@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="az">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1a001e">
+  <meta name="description" content="LUMI — oynayın, xal toplayın və əylənin.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LUMI">
+  <title>LUMI — giriş</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="device" id="app">
+    <section class="welcome" id="welcome" aria-label="LUMI-yə xoş gəlmisiniz">
+      <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+      <div class="brand"><img class="brand-logo" src="assets-logo.png" alt="LUMI"></div>
+      <h1 class="greeting">Lumi <span>Sizi</span> Salamlayır</h1>
+      <div class="mascots" aria-label="LUMI maskotları">
+        <span class="mascot-glow"></span>
+        <img src="assets-mascots-user.png" alt="LUMI-nin günəş və kosmos maskotları əl-ələ dayanır">
+        <span class="spark spark-a">✦</span><span class="spark spark-b">✧</span><span class="spark spark-c">✦</span>
+      </div>
+      <div class="horizon" aria-hidden="true"></div>
+      <div class="actions" id="guest-actions">
+        <button class="action action-primary" id="login-open" type="button">Giriş et</button>
+        <button class="action action-secondary" id="signup-open" type="button">Qeydiyyatdan keç</button>
+      </div>
+      <div class="returning-actions" id="returning-actions" hidden>
+        <p id="returning-greeting">Xoş gəldin!</p>
+        <button class="action action-primary" id="returning-continue" type="button">Davam et</button>
+      </div>
+      <footer class="footer">WWW.LUMI.AZ</footer>
+    </section>
+
+    <section class="signup-page" id="signup-page" hidden>
+      <button class="back-button" id="signup-back" type="button" aria-label="Geri qayıt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 7-7m-7 7 7 7"/></svg></button>
+      <div class="mini-brand"><img src="assets-logo.png" alt="LUMI"></div>
+      <p class="eyebrow">LUMI DÜNYASINA QOŞUL</p>
+      <h2>Yeni hesab yarat</h2>
+      <p class="form-intro">Məlumatlarını daxil et və macəraya başla.</p>
+      <form id="signup-form" novalidate>
+        <div class="form-grid">
+          <label>Ad<input name="firstName" autocomplete="given-name" placeholder="Adın" required></label>
+          <label>Soyad<input name="lastName" autocomplete="family-name" placeholder="Soyadın" required></label>
+        </div>
+        <label>İstifadəçi adı<input name="username" autocomplete="username" placeholder="İstifadəçi adın" required minlength="3"></label>
+        <label>E-poçt<input name="email" type="email" autocomplete="email" placeholder="ad@numune.az" required></label>
+        <label>Telefon nömrəsi<input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+994 50 123 45 67" required></label>
+        <label>Şifrə<input name="password" type="password" autocomplete="new-password" placeholder="Ən azı 8 simvol" required minlength="8"></label>
+        <label>Şifrənin təkrarı<input name="confirmPassword" type="password" autocomplete="new-password" placeholder="Şifrəni yenidən yaz" required minlength="8"></label>
+        <p class="form-error" id="signup-error" role="alert"></p>
+        <button class="action action-primary submit-action" type="submit">Qeydiyyatdan keç</button>
+      </form>
+      <p class="switch-auth">Artıq hesabın var? <button id="signup-to-login" type="button">Daxil ol</button></p>
+      <footer class="footer signup-footer">WWW.LUMI.AZ</footer>
+    </section>
+
+    <section class="login-overlay" id="login-overlay" hidden>
+      <div class="dialog-backdrop" id="dialog-backdrop"></div>
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <button class="dialog-close" id="login-close" type="button" aria-label="Bağla">×</button>
+        <span class="dialog-sun" aria-hidden="true">☀</span>
+        <p class="eyebrow">YENİDƏN XOŞ GƏLMİSƏN</p>
+        <h2 id="login-title">Hesabına daxil ol</h2>
+        <p class="form-intro">Oyunlarına və xallarına davam et.</p>
+        <form id="login-form" novalidate>
+          <label>E-poçt<input name="email" type="email" autocomplete="email" placeholder="ad@numune.az" required></label>
+          <label>Şifrə<input name="password" type="password" autocomplete="current-password" placeholder="Şifrən" required></label>
+          <p class="form-error" id="login-error" role="alert"></p>
+          <button class="action action-primary submit-action" type="submit">Giriş et</button>
+        </form>
+        <p class="switch-auth">Hesabın yoxdur? <button id="login-to-signup" type="button">Qeydiyyatdan keç</button></p>
+      </div>
+    </section>
+
+    <section class="success-page" id="success-page" hidden>
+      <div class="success-sun"><span>☀️</span></div><p class="eyebrow">LUMI DÜNYASI</p>
+      <h2 id="success-title">Xoş gəldin!</h2><p id="success-copy"></p>
+      <button class="action action-primary" id="success-continue" type="button">Davam et</button>
+      <button class="text-button" id="logout" type="button">Hesabdan çıx</button>
+    </section>
+    <section class="home-page" id="home-page" hidden aria-label="LUMI əsas səhifə">
+      <header class="home-header">
+        <a class="home-logo" href="#home" aria-label="LUMI əsas səhifə"><img src="assets-logo.png" alt="LUMI"></a>
+        <div class="header-actions">
+          <button class="header-icon notification-button" id="notifications-open" type="button" aria-label="Bildirişlər">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><i></i>
+          </button>
+          <button class="profile-button" id="profile-open" type="button" aria-label="İstifadəçi profili"><img src="assets-home-mascot.png" alt=""></button>
+        </div>
+      </header>
+      <div class="home-content">
+        <section class="promo-banner" aria-label="Bonus oyunu">
+          <div class="promo-copy"><p class="promo-title">OYNA<br>XALLARI TOPLA<br>HƏDİYYƏ QAZAN!</p><p class="promo-subtitle">Bonuslar səni gözləyir!</p><button class="promo-button" id="play-bonus" type="button">OYUNA BAŞLA</button></div>
+          <img class="promo-mascot" src="assets-home-mascot.png" alt="LUMI maskotları və bonus hədiyyəsi">
+        </section>
+        <button class="gift-banner" id="gift-open" type="button" aria-label="1000 xal topla və Olivia hədiyyə kartları haqqında">
+          <span class="gift-copy"><strong>1000 XAL TOPLA</strong><b>OLİVİA-DAN</b><strong>HƏDİYYƏ KARTI<br>BİZDƏN!</strong><small>20 OKTYABR — 20 NOYABR</small></span>
+          <img src="assets-gift-cards.png" alt="20, 30 və 50 AZN Olivia hədiyyə kartları">
+        </button>
+        <section class="games-section" aria-label="Oyunlar">
+          <div class="section-heading"><h2>Oyunlar</h2></div>
+          <div class="game-carousel" id="game-carousel" tabindex="0" aria-label="Oyun karuseli, sağa və sola sürüşdürün">
+            <button class="game-card" data-game="flappy" type="button" aria-label="Flappy Bird oyununu aç"><img src="assets-game-flappy.png" alt=""></button>
+            <button class="game-card" data-game="space" type="button" aria-label="Space Runner oyununu aç"><img src="assets-game-space.png" alt=""></button>
+            <button class="game-card merge-card" data-game="merge9" type="button" aria-label="2048 oyununu aç"><span class="merge-mini" aria-hidden="true"><i>2</i><i></i><i>4</i><i>8</i><i>16</i><i></i><i></i><i>32</i><i>64</i></span><strong>2048</strong><small>PUZZLE</small></button>
+            <button class="game-card" data-game="fruit" type="button" aria-label="Fruit Ninja oyununu aç"><img src="assets-game-fruit.png" alt=""></button>
+            <button class="game-card silly-card" data-game="sillycat" type="button" aria-label="Silly Cat oyununu aç"><span class="silly-cat-art" aria-hidden="true">🐈</span><strong>SILLY CAT</strong><small>YOLU KEÇ!</small></button>
+            <button class="game-card coming-card" data-game="soon" type="button" aria-label="Yeni oyunlar tezliklə"><span class="coming-icon">✦</span><strong>YENİ OYUNLAR</strong><small>TEZLİKLƏ</small></button>
+          </div>
+          <p class="swipe-hint">Daha çox oyun üçün sürüşdür <span>⟶</span></p>
+        </section>
+      </div>
+      <footer class="home-footer">WWW.LUMI.AZ</footer>
+    </section>
+    <div id="home-modal-root"></div>
+    <div class="toast" id="toast" role="status"></div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
