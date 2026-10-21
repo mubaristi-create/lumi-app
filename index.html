@@ -14,12 +14,14 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="lumi-theme.css">
+<link rel="stylesheet" href="community.css">
 </head>
 <body>
   <main class="device" id="app">
     <section class="welcome" id="welcome" aria-label="LUMI-yə xoş gəlmisiniz">
       <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
-      <div class="brand"><img class="brand-logo" src="assets-logo.png" alt="LUMI"></div>
+      <div class="brand"><img class="brand-logo" src="assets-logo-icon.png" alt="LUMI"></div>
       <h1 class="greeting">Lumi <span>Sizi</span> Salamlayır</h1>
       <div class="mascots" aria-label="LUMI maskotları">
         <span class="mascot-glow"></span>
@@ -40,7 +42,7 @@
 
     <section class="signup-page" id="signup-page" hidden>
       <button class="back-button" id="signup-back" type="button" aria-label="Geri qayıt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m0 0 7-7m-7 7 7 7"/></svg></button>
-      <div class="mini-brand"><img src="assets-logo.png" alt="LUMI"></div>
+      <div class="mini-brand"><img src="assets-logo-icon.png" alt="LUMI"></div>
       <p class="eyebrow">LUMI DÜNYASINA QOŞUL</p>
       <h2>Yeni hesab yarat</h2>
       <p class="form-intro">Məlumatlarını daxil et və macəraya başla.</p>
@@ -87,7 +89,7 @@
     </section>
     <section class="home-page" id="home-page" hidden aria-label="LUMI əsas səhifə">
       <header class="home-header">
-        <a class="home-logo" href="#home" aria-label="LUMI əsas səhifə"><img src="assets-logo.png" alt="LUMI"></a>
+        <a class="home-logo" href="#home" aria-label="LUMI əsas səhifə"><img src="assets-logo-icon.png" alt="LUMI"></a>
         <div class="header-actions">
           <button class="header-icon notification-button" id="notifications-open" type="button" aria-label="Bildirişlər">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><i></i>
@@ -96,22 +98,23 @@
         </div>
       </header>
       <div class="home-content">
-        <section class="promo-banner" aria-label="Bonus oyunu">
-          <div class="promo-copy"><p class="promo-title">OYNA<br>XALLARI TOPLA<br>HƏDİYYƏ QAZAN!</p><p class="promo-subtitle">Bonuslar səni gözləyir!</p><button class="promo-button" id="play-bonus" type="button">OYUNA BAŞLA</button></div>
-          <img class="promo-mascot" src="assets-home-mascot.png" alt="LUMI maskotları və bonus hədiyyəsi">
-        </section>
-        <button class="gift-banner" id="gift-open" type="button" aria-label="1000 xal topla və Olivia hədiyyə kartları haqqında">
-          <span class="gift-copy"><strong>1000 XAL TOPLA</strong><b>OLİVİA-DAN</b><strong>HƏDİYYƏ KARTI<br>BİZDƏN!</strong><small>20 OKTYABR — 20 NOYABR</small></span>
-          <img src="assets-gift-cards.png" alt="20, 30 və 50 AZN Olivia hədiyyə kartları">
-        </button>
+        <section class="campaign-section" aria-label="LUMI təklifləri"><div class="section-heading"><h2>Sənin üçün</h2><span>OYNA · TOPLA · QAZAN</span></div><div class="campaign-track" id="campaign-track" tabindex="0">
+<article class="campaign-card prize-slide"><img src="assets-prize-10.png" alt="LUMI 10 AZN uduş kartı"><div class="campaign-copy"><span class="eyebrow">TEZLİKLƏ · İLK 5 NƏFƏR</span><h2>5000 LUMI topla.<br>10 AZN qazan!</h2><p>Müəyyən kampaniya müddətində hədəfə ilk çatan 5 nəfərin hər birinə 10 AZN.</p><button class="promo-button" id="gift-open">Ətraflı bax</button></div></article>
+<article class="campaign-card friends-slide"><div class="mascot-window friends-art"><img src="assets-mascot-03.png" alt="Dost olan LUMI maskotları" draggable="false"></div><div class="campaign-copy"><span class="eyebrow">DOSTLARLA DAHA MARAQLI</span><h2>3 dostunu gətir,<br>1000 LUMI qazan</h2><p>Şəxsi promokodunu profilindən paylaş.</p><button class="promo-button" id="invite-open">Promokodumu göstər</button></div></article>
+<article class="campaign-card social-slide"><div class="mascot-window social-art"><img src="assets-mascot-01.png" alt="Ürək tutan günəş maskotu" draggable="false"></div><div class="campaign-copy"><span class="eyebrow">LUMI İCMASI</span><h2>Bizi Instagram-da izlə</h2><p>İzləmən təsdiqlənəndə +50 LUMI bonusu.</p><button class="promo-button" id="instagram-open">Instagram ↗</button></div></article>
+<article class="campaign-card premium-slide"><div class="mascot-window premium-art"><img src="assets-mascot-04.png" alt="Oyun oynayan LUMI maskotu" draggable="false"></div><div class="campaign-copy"><span class="eyebrow">7 GÜN RAHAT OYUN</span><h2>Reklamsız LUMI</h2><p>7 günlük reklamsız istifadə — 1,99 AZN.</p><button class="promo-button" id="premium-open">Təklifə bax</button></div></article>
+</div><div class="campaign-nav"><button id="campaign-prev" aria-label="Əvvəlki təklif">←</button><div id="campaign-dots"></div><button id="campaign-next" aria-label="Növbəti təklif">→</button></div></section>
+<button id="play-bonus" hidden>Oyna</button>
+        <button class="ranking-entry" id="ranking-open" type="button"><span class="ranking-medal">🏆</span><span><strong>LUMI liderləri</strong><small>Xalını müqayisə et, zirvəyə yüksəl</small></span><b>→</b></button>
         <section class="games-section" aria-label="Oyunlar">
-          <div class="section-heading"><h2>Oyunlar</h2></div>
+          <div class="section-heading"><h2>Oyunlar</h2><span id="home-balance" class="home-balance" aria-live="polite">⭐ 0 LUMI</span></div>
           <div class="game-carousel" id="game-carousel" tabindex="0" aria-label="Oyun karuseli, sağa və sola sürüşdürün">
             <button class="game-card" data-game="flappy" type="button" aria-label="Flappy Bird oyununu aç"><img src="assets-game-flappy.png" alt=""></button>
-            <button class="game-card" data-game="space" type="button" aria-label="Space Runner oyununu aç"><img src="assets-game-space.png" alt=""></button>
+            <button class="game-card" data-game="space" type="button" aria-label="Kosmik Qüllə oyununu aç"><img src="assets-game-tower.svg" alt="Kosmik Qüllə — kubları üst-üstə yerləşdir"></button>
             <button class="game-card merge-card" data-game="merge9" type="button" aria-label="2048 oyununu aç"><span class="merge-mini" aria-hidden="true"><i>2</i><i></i><i>4</i><i>8</i><i>16</i><i></i><i></i><i>32</i><i>64</i></span><strong>2048</strong><small>PUZZLE</small></button>
             <button class="game-card" data-game="fruit" type="button" aria-label="Fruit Ninja oyununu aç"><img src="assets-game-fruit.png" alt=""></button>
             <button class="game-card silly-card" data-game="sillycat" type="button" aria-label="Silly Cat oyununu aç"><span class="silly-cat-art" aria-hidden="true">🐈</span><strong>SILLY CAT</strong><small>YOLU KEÇ!</small></button>
+            <button class="game-card blast-card" data-game="blast" type="button" aria-label="Block Blast oyununu aç"><span class="blast-card-board" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><strong>BLOCK BLAST</strong><small>SÜRÜŞDÜR · YERLƏŞDİR</small></button>
             <button class="game-card coming-card" data-game="soon" type="button" aria-label="Yeni oyunlar tezliklə"><span class="coming-icon">✦</span><strong>YENİ OYUNLAR</strong><small>TEZLİKLƏ</small></button>
           </div>
           <p class="swipe-hint">Daha çox oyun üçün sürüşdür <span>⟶</span></p>
@@ -122,6 +125,10 @@
     <div id="home-modal-root"></div>
     <div class="toast" id="toast" role="status"></div>
   </main>
+  <script src="lumi-wallet.js"></script>
+<script src="lumi-ads.js"></script>
   <script src="app.js"></script>
+<script src="lumi-community.js"></script>
+<script src="lumi-statistics.js"></script>
 </body>
 </html>

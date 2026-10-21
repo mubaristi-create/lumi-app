@@ -14,6 +14,7 @@ function readAccount() {
   catch { return null; }
 }
 function saveAccount(value) {
+  if(!value.promoCode)value.promoCode='LUMI-'+randomSalt().slice(0,10).toUpperCase();
   try { localStorage.setItem('lumi-account-v2', JSON.stringify(value)); }
   catch { /* Keep this session usable when storage is blocked. */ }
 }
@@ -27,18 +28,20 @@ function saveSession() {
   signedIn=true;
   try { localStorage.setItem('lumi-session-v2', JSON.stringify({email:account.email})); }
   catch { /* Keep this session usable when storage is blocked. */ }
+  globalThis.LumiAds?.activate(true);
 }
 function clearSession() {
+  globalThis.LumiAds?.deactivate();
   signedIn=false;
   try { localStorage.removeItem('lumi-session-v2'); } catch { /* Ignore blocked storage. */ }
 }
 function readPoints() {
-  try { return Number(localStorage.getItem('lumi-points') || 0) || 0; }
+  try { return LumiWallet.balance(); }
   catch { return 0; }
 }
 function savePoints(value) {
   points=value;
-  try { localStorage.setItem('lumi-points',String(points)); } catch { /* Keep points for this session. */ }
+  try { LumiWallet.set(points); } catch { /* Keep points for this session. */ }
 }
 function showToast(message) {
   const toast = $('toast');
@@ -75,6 +78,7 @@ function openLogin() {
   $('login-form').elements.email.focus({ preventScroll:true });
 }
 function showSuccess(kind) {
+  globalThis.LumiAds?.activate();
   welcome.hidden = true;
   signupPage.hidden = true;
   loginOverlay.hidden = true;
@@ -86,6 +90,8 @@ function showSuccess(kind) {
     : 'Giriş uğurludur. Hesabına daxil oldun.';
 }
 function showHome() {
+  globalThis.LumiAds?.activate();
+  refreshPoints();
   welcome.hidden = true;
   signupPage.hidden = true;
   loginOverlay.hidden = true;
@@ -137,17 +143,9 @@ function closeHomeModal() {
 function showNotifications() {
   openHomeModal(`<button class="home-modal-close" data-home-close aria-label="Bağla">×</button><h2>Bildirişlər</h2><p>Hələlik yeni bildiriş yoxdur. Yeni oyunlar və bonuslar haqqında məlumat burada görünəcək.</p><button class="action action-primary" data-home-close>Bağla</button>`);
 }
-function showProfile() {
-  const name=account?.username || account?.firstName || 'LUMI istifadəçisi';
-  openHomeModal(`<button class="home-modal-close" data-home-close aria-label="Bağla">×</button><h2>Profil</h2><div class="profile-row"><b>${escapeHTML(name)}</b></div><div class="profile-row">${escapeHTML(account?.email || '')}</div><div class="profile-row">⭐ Toplanan xallar: <b>${points}</b></div><button class="action action-primary" id="home-logout">Hesabdan çıx</button>`);
-  $('home-logout').addEventListener('click',()=>{closeHomeModal();clearSession();showWelcome();showToast('Hesabdan çıxdınız.');});
-}
+function showProfile(){location.href='./profile.html'}
 function escapeHTML(value) { return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function showGiftDetails() {
-  const progress=Math.min(points,1000);
-  const percent=Math.round(progress/10);
-  openHomeModal(`<button class="home-modal-close" data-home-close aria-label="Bağla">×</button><h2>Hədiyyə kartları 🎁</h2><p>Olivia hədiyyə kartı mərhələsinə çatmaq üçün 1000 xal topla.</p><div class="profile-row">Hazırkı xalın: <b>${points}</b> / 1000</div><div style="height:9px;border-radius:9px;background:#ffffff22;overflow:hidden"><div style="height:100%;width:${percent}%;background:linear-gradient(90deg,#ffb129,#ff6c51)"></div></div><p>Bu prototipdə xal irəliləyişi göstərilir; mükafatların verilməsi sonrakı mərhələdə qoşulacaq.</p><button class="action action-primary" data-home-close>Oyuna qayıt</button>`);
-}
+function showGiftDetails(){refreshPoints();const percent=Math.min(100,points/5000*100);openHomeModal(`<button class="home-modal-close" data-home-close aria-label="Bağla">×</button><span class="eyebrow">TEZLİKLƏ</span><h2>5000 LUMI · 10 AZN</h2><img class="prize-preview" src="assets-prize-10.png" alt="10 AZN LUMI kartı"><p>Kampaniya müddətində 5000 xala ilk çatan 5 nəfərin hər biri 10 AZN mükafat qazanacaq.</p><div class="profile-row">Balansın: <b>${points} / 5000 LUMI</b></div><progress max="100" value="${percent}"></progress><p>Kampaniya hələ başlamayıb. Tarixlər, iştirak şərtləri və təsdiqlənmiş qaliblər burada yayımlanacaq.</p><button class="action action-primary" data-home-close>Oynamağa davam et</button>`)}
 function startHomeGame(kind) {
   if (kind==='soon') { showToast('Yeni oyunlar tezliklə əlavə olunacaq.'); return; }
   const details={
@@ -177,7 +175,7 @@ function startHomeGame(kind) {
       seconds--;timeLabel.textContent=seconds;
       if(seconds<=0){
         clearInterval(homeModalRoot._timer);homeModalRoot._timer=null;running=false;
-        savePoints(points+roundScore);closeHomeModal();showToast(`Oyuna görə +${roundScore} xal qazandın!`);
+        LumiWallet.add('bonus',roundScore);refreshPoints();closeHomeModal();showToast(`Oyuna görə +${roundScore} xal qazandın!`);
       }
     },1000);
   });
@@ -203,6 +201,7 @@ $('game-carousel').querySelectorAll('[data-game]').forEach(card=>card.addEventLi
   if(card.dataset.game==='merge9'){location.href='./merge9.html';return;}
   if(card.dataset.game==='fruit'){location.href='./fruit-ninja.html';return;}
   if(card.dataset.game==='sillycat'){location.href='./silly-cat.html';return;}
+  if(card.dataset.game==='blast'){location.href='./blast-puzzle.html';return;}
   startHomeGame(card.dataset.game);
 }));
 const gameCarousel=$('game-carousel');
@@ -285,3 +284,6 @@ $('login-form').addEventListener('submit', async event => {
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
 }
+
+function refreshPoints(){points=readPoints();const balance=document.getElementById("home-balance");if(balance)balance.textContent="⭐ "+points+" LUMI";document.querySelectorAll("[data-wallet-balance]").forEach(el=>el.textContent=points);}
+addEventListener("lumi:balance",refreshPoints);addEventListener("storage",refreshPoints);addEventListener("pageshow",refreshPoints);addEventListener("focus",refreshPoints);document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshPoints()});refreshPoints();
