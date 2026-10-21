@@ -282,7 +282,7 @@ $('login-form').addEventListener('submit', async event => {
 });
 
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+  let refreshing=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!refreshing){refreshing=true;location.reload()}});window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(registration=>registration.update()).catch(()=>{}));
 }
 
 function refreshPoints(){points=readPoints();const balance=document.getElementById("home-balance");if(balance)balance.textContent="⭐ "+points+" LUMI";document.querySelectorAll("[data-wallet-balance]").forEach(el=>el.textContent=points);}
