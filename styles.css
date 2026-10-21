@@ -124,6 +124,12 @@ input:focus { border-color:#ffa832; box-shadow:0 0 0 3px #ffa83220; }
 .silly-cat-art { display:grid; place-items:center; width:68px; height:76px; border:2px solid #ffffff55; border-radius:22px 22px 18px 18px; background:linear-gradient(160deg,#b6efff,#3682aa); font-size:40px; filter:drop-shadow(0 7px 8px #071a3d77); animation:twinkle 2s ease-in-out infinite alternate; }
 .silly-card strong { font-size:11px; letter-spacing:1px; }
 .silly-card small { color:#e5f6ff; font-size:8px; font-weight:850; letter-spacing:1px; }
+.game-card.gold-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:9px 5px; color:#fff8dd; background:radial-gradient(circle at 50% 28%,#9c6424 0,#523016 47%,#231516 100%); }
+.gold-card-spark { position:absolute; top:9px; right:12px; color:#ffe18b; font-size:17px; animation:twinkle 1.4s ease-in-out infinite alternate; }
+.gold-card-miner { display:grid; place-items:center; width:66px; height:68px; border:1px solid #ffe9a466; border-radius:22px; background:linear-gradient(145deg,#ffd56a55,#8d4c1833); font-size:37px; filter:drop-shadow(0 7px 8px #12080088); animation:twinkle 2s ease-in-out infinite alternate; }
+.gold-card-ore { font-size:18px; margin-top:-13px; filter:drop-shadow(0 2px 4px #100600); }
+.gold-card strong { font-size:10px; letter-spacing:.8px; }
+.gold-card small { color:#ffdda0; font-size:8px; font-weight:850; letter-spacing:.6px; }
 .coming-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; border:1px dashed #ffae5a99; color:#fff; background:radial-gradient(circle at 50% 35%,#690074,#210027); text-align:center; }
 .coming-card .coming-icon { color:#ffb42f; font-size:31px; animation:twinkle 1.8s ease-in-out infinite alternate; }
 .coming-card strong { font-size:clamp(10px,2.7vw,13px); line-height:1.15; }

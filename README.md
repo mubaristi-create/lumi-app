@@ -33,3 +33,5 @@ SILLY CAT HTML Canvas üzərində işləyən 2D yolkeçmə oyunudur. Pişiyi yux
 
 SILLY CAT level 1-də az maşın və aşağı sürətlə başlayır; hər təhlükəsiz keçiddə level artır, +3 xal verilir və sürət 20% yüksəlir. Level keçidlərində 2 saniyəlik demo reklam fasiləsi olur. Hər level-də yol, fon və maşın rəngləri növbə ilə dəyişir. Yolda çıxan günəş maşınları dağıdaraq 5 saniyəlik təhlükəsiz keçid verir. Maşın mühərriki, siqnal, pişik miyoldaması və toqquşma səsləri brauzerin Web Audio sintezatoru ilə yaradılır; səs düyməsindən söndürülür.
 
+Gold Miner qarmaqla yellənən xəzinələri tutmaq oyunudur. Qarmağı toxunuşla, kliklə, Space və ya aşağı oxla burax; qızıl, brilyant, daş, çanta və dinamit fərqli dəyər və çəkilərə malikdir. Hədəf məbləğini vaxta qədər yığaraq səviyyəni keç; hər səviyyə +3 LUMI xalı və mədən bonusu verir. Dinamit qarmaqda olan daşı partlada bilər. Səhnə və mədən işıqları animasiyalıdır, mobil ekrana uyğunlaşır; pauza, səs, rekord və əsas səhifəyə qayıtma var. Gold Miner kartı əsas səhifənin oyun karuselindədir.
+

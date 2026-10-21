@@ -203,6 +203,7 @@ $('game-carousel').querySelectorAll('[data-game]').forEach(card=>card.addEventLi
   if(card.dataset.game==='merge9'){location.href='./merge9.html';return;}
   if(card.dataset.game==='fruit'){location.href='./fruit-ninja.html';return;}
   if(card.dataset.game==='sillycat'){location.href='./silly-cat.html';return;}
+  if(card.dataset.game==='goldminer'){location.href='./gold-miner.html';return;}
   startHomeGame(card.dataset.game);
 }));
 const gameCarousel=$('game-carousel');
