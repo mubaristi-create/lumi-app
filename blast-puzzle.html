@@ -88,7 +88,7 @@ function validRun(run,l){return run&&run.level===l&&Number.isInteger(run.lines)&
 function saveRun(){}
 function addLumi(){lumiHud()}
 function lumiHud(){$('game-earned').innerHTML='+'+gameEarned+' <span>LUMI</span>';$('wallet-balance').innerHTML=(globalThis.LumiWallet?LumiWallet.balance():read('lumi-points',0))+' <span>LUMI</span>';}
-addEventListener('lumi:balance',lumiHud);addEventListener('focus',lumiHud);addEventListener('storage',lumiHud);
+addEventListener('lumi:balance',lumiHud);addEventListener('lumi:cloud',lumiHud);addEventListener('focus',lumiHud);addEventListener('storage',lumiHud);
 function melody(kind){const notes={place:[330,460],line:[520,660,880],combo:[660,880,1100,1320],win:[523,659,784,1047,1319],next:[523,784,1047],sun:[880,1175,1568,1760],lose:[340,270,190]}[kind]||[500];notes.forEach((n,i)=>setTimeout(()=>tone(n,(kind==='win'||kind==='sun') ? .22 : .11),i*(kind==='win'?95:55)))}
 
 function bonusFireworks(){
@@ -115,6 +115,6 @@ addEventListener('pagehide',()=>saveRun());document.addEventListener('visibility
 
 $('undo').hidden=true;$('undo').onclick=()=>{};$('hint').onclick=hint;$('settings').onclick=pause;$('sound').onclick=()=>{sound=!sound;save('lumi-block-sound',sound?1:0);hud();if(sound)tone(600)};document.addEventListener('pointermove',moveDrag,{passive:false});document.addEventListener('pointerup',endDrag);document.addEventListener('pointercancel',()=>{cancelDrag();renderTray()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(drag){cancelDrag();renderTray()}else if(mode==='playing')pause();else if(mode==='paused')$('primary').click()}});addEventListener('resize',()=>{if(!drag)renderTray()});start(level,progress.run);requestAnimationFrame(tick);
 
-LumiGameSettings.install({key:'block',hide:['settings','sound'],isRunning:()=>mode==='playing',isPaused:()=>mode==='paused',canOpen:()=>!locked&&['playing','paused'].includes(mode),pause,resume:()=>{if(mode==='paused'){mode='playing';$('overlay').hidden=true;render()}},restart:()=>start(level),soundOn:()=>sound,toggleSound:()=>$('sound').click(),save:saveRun});
+LumiGameSettings.install({key:'block',hide:['settings','sound'],isRunning:()=>mode==='playing',isPaused:()=>mode==='paused',canOpen:()=>!cloudStarting&&!locked&&['playing','paused'].includes(mode),pause,resume:()=>{if(mode==='paused'){mode='playing';$('overlay').hidden=true;render()}},restart:()=>start(level),soundOn:()=>sound,toggleSound:()=>$('sound').click(),save:saveRun});
 })();
 </script></body></html>
