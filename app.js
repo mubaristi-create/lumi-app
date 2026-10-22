@@ -5,44 +5,9 @@ const loginOverlay = $('login-overlay');
 const successPage = $('success-page');
 const homePage = $('home-page');
 const homeModalRoot = $('home-modal-root');
-let account = readAccount();
-let signedIn = readSession();
-let points = readPoints();
-
-function readAccount() {
-  try { return JSON.parse(localStorage.getItem('lumi-account-v2') || 'null'); }
-  catch { return null; }
-}
-function saveAccount(value) {
-  if(!value.promoCode)value.promoCode='LUMI-'+randomSalt().slice(0,10).toUpperCase();
-  try { localStorage.setItem('lumi-account-v2', JSON.stringify(value)); }
-  catch { /* Keep this session usable when storage is blocked. */ }
-}
-function readSession() {
-  try {
-    const session=JSON.parse(localStorage.getItem('lumi-session-v2') || 'null');
-    return Boolean(account && session?.email===account.email);
-  } catch { return false; }
-}
-function saveSession() {
-  signedIn=true;
-  try { localStorage.setItem('lumi-session-v2', JSON.stringify({email:account.email})); }
-  catch { /* Keep this session usable when storage is blocked. */ }
-  globalThis.LumiAds?.activate(true);
-}
-function clearSession() {
-  globalThis.LumiAds?.deactivate();
-  signedIn=false;
-  try { localStorage.removeItem('lumi-session-v2'); } catch { /* Ignore blocked storage. */ }
-}
-function readPoints() {
-  try { return LumiWallet.balance(); }
-  catch { return 0; }
-}
-function savePoints(value) {
-  points=value;
-  try { LumiWallet.set(points); } catch { /* Keep points for this session. */ }
-}
+let account=null,signedIn=false,points=0,cloudBooted=false;
+function readPoints(){return LumiCloud.state.status==='signedIn'?LumiCloud.state.balance:null}
+async function clearSession(){await LumiCloud.signOut();globalThis.LumiAds?.deactivate();account=null;signedIn=false}
 function showToast(message) {
   const toast = $('toast');
   toast.textContent = message;
@@ -86,10 +51,12 @@ function showSuccess(kind) {
   successPage.hidden = false;
   $('success-title').textContent = `Xoş gəldin ${account?.username || 'LUMI dostu'}!`;
   $('success-copy').textContent = kind === 'signup'
-    ? 'Qeydiyyatın uğurla tamamlandı. Hesabın bu cihazda saxlanıldı.'
+    ? 'Qeydiyyatın uğurla tamamlandı. Server hesabın hazırdır.'
     : 'Giriş uğurludur. Hesabına daxil oldun.';
 }
 function showHome() {
+  if(!signedIn){showWelcome();showToast('Hesabına daxil ol.');return;}
+
   globalThis.LumiAds?.activate();
   refreshPoints();
   welcome.hidden = true;
@@ -99,34 +66,6 @@ function showHome() {
   homePage.hidden = false;
   $('home-page').scrollTop=0;
   $('app').scrollTop=0;
-}
-function normalizeEmail(email) { return email.trim().toLocaleLowerCase('az'); }
-function randomSalt() {
-  const bytes = new Uint8Array(16);
-  if (globalThis.crypto?.getRandomValues) crypto.getRandomValues(bytes);
-  else for (let i=0;i<bytes.length;i++) bytes[i]=Math.floor(Math.random()*256);
-  return [...bytes].map(v=>v.toString(16).padStart(2,'0')).join('');
-}
-async function passwordDigest(password, salt) {
-  const source = `${salt}:${password}`;
-  if (globalThis.crypto?.subtle && globalThis.TextEncoder) {
-    const data = new TextEncoder().encode(source);
-    const digest = await crypto.subtle.digest('SHA-256', data);
-    return [...new Uint8Array(digest)].map(v=>v.toString(16).padStart(2,'0')).join('');
-  }
-  // File preview fallback for this local prototype; production auth belongs on a server.
-  let hash = 2166136261;
-  for (let i=0;i<source.length;i++) { hash ^= source.charCodeAt(i); hash = Math.imul(hash,16777619); }
-  return (hash>>>0).toString(16).padStart(8,'0');
-}
-async function makePasswordRecord(password) {
-  const salt=randomSalt();
-  const digest=await passwordDigest(password,salt);
-  return { salt, digest };
-}
-async function verifyPassword(password, record) {
-  if (!record?.salt || !record?.digest) return false;
-  return (await passwordDigest(password,record.salt))===record.digest;
 }
 function openHomeModal(content) {
   homeModalRoot.innerHTML=`<div class="home-modal-backdrop"><section class="home-modal" role="dialog" aria-modal="true">${content}</section></div>`;
@@ -141,6 +80,8 @@ function closeHomeModal() {
   homeModalRoot.replaceChildren();
 }
 function showNotifications() {
+  if(globalThis.LumiRewardNotifications){LumiRewardNotifications();return;}
+
   openHomeModal(`<button class="home-modal-close" data-home-close aria-label="Bağla">×</button><h2>Bildirişlər</h2><p>Hələlik yeni bildiriş yoxdur. Yeni oyunlar və bonuslar haqqında məlumat burada görünəcək.</p><button class="action action-primary" data-home-close>Bağla</button>`);
 }
 function showProfile(){location.href='./profile.html'}
@@ -189,7 +130,7 @@ $('login-to-signup').addEventListener('click', showSignup);
 $('login-close').addEventListener('click', () => { loginOverlay.hidden=true; });
 $('dialog-backdrop').addEventListener('click', () => { loginOverlay.hidden=true; });
 $('success-continue').addEventListener('click', showHome);
-$('logout').addEventListener('click', () => { clearSession(); showWelcome(); showToast('Hesabdan çıxdınız.'); });
+$('logout').addEventListener('click', async () => {try{await clearSession();showWelcome();showToast('Hesabdan çıxdınız.')}catch(e){showToast(LumiCloud.friendly(e))}});
 $('returning-continue').addEventListener('click', showHome);
 $('notifications-open').addEventListener('click', showNotifications);
 $('profile-open').addEventListener('click', showProfile);
@@ -246,21 +187,19 @@ $('signup-form').addEventListener('submit', async event => {
     if (!String(data[name]||'').trim()) { error.textContent=`${label} sahəsini doldurun.`; form.elements[name].focus(); return; }
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) { error.textContent='Düzgün e-poçt ünvanı daxil edin.'; form.elements.email.focus(); return; }
-  if (data.username.trim().length<3) { error.textContent='İstifadəçi adı ən azı 3 simvol olmalıdır.'; form.elements.username.focus(); return; }
+  if (data.username.trim().length<3||data.username.trim().length>30) { error.textContent='İstifadəçi adı 3–30 simvol olmalıdır.'; form.elements.username.focus(); return; }
   if (data.phone.replace(/\D/g,'').length<7) { error.textContent='Düzgün telefon nömrəsi daxil edin.'; form.elements.phone.focus(); return; }
   if (data.password.length<8) { error.textContent='Şifrə ən azı 8 simvol olmalıdır.'; form.elements.password.focus(); return; }
   if (data.password!==data.confirmPassword) { error.textContent='Şifrələr eyni deyil.'; form.elements.confirmPassword.focus(); return; }
   const submit=form.querySelector('[type=submit]');
   submit.disabled=true; submit.textContent='Hesab yaradılır…';
   try {
-    const password=await makePasswordRecord(data.password);
-    account={ firstName:data.firstName.trim(), lastName:data.lastName.trim(), username:data.username.trim(), email:normalizeEmail(data.email), phone:data.phone.trim(), password };
-    saveAccount(account);
-    saveSession();
-    showSuccess('signup');
+    const result=await LumiServer.signUp(data);
+    form.elements.password.value='';form.elements.confirmPassword.value='';
+    if(result.session){await LumiCloud.refresh();if(LumiCloud.state.status!=='signedIn')throw Error('Profile load failed');showSuccess('signup')}
+    else{showWelcome();openLogin();$('login-form').elements.email.value=data.email;$('login-error').textContent='E-poçtuna göndərilən linklə hesabını təsdiqlə, sonra daxil ol.';showToast('E-poçtunu yoxla — təsdiq məktubu göndərildi.');}
   } catch (err) {
-    error.textContent='Qeydiyyat zamanı xəta oldu. Yenidən cəhd edin.';
-    console.error('LUMI sign-up error:',err);
+    error.textContent=LumiCloud.friendly(err);
   } finally {
     submit.disabled=false; submit.textContent='Qeydiyyatdan keç';
   }
@@ -273,17 +212,18 @@ $('login-form').addEventListener('submit', async event => {
   const error=$('login-error');
   error.textContent='';
   if (!data.email.trim() || !data.password) { error.textContent='E-poçt və şifrəni daxil edin.'; return; }
-  if (!account || normalizeEmail(data.email)!==account.email || !(await verifyPassword(data.password,account.password))) {
-    error.textContent='E-poçt və ya şifrə yanlışdır. Hesabın yoxdursa, qeydiyyatdan keç.';
-    return;
-  }
-  saveSession();
-  showSuccess('login');
+  const button=form.querySelector('[type=submit]');button.disabled=true;
+  try{await LumiCloud.signIn(data.email,data.password);form.elements.password.value='';showSuccess('login')}
+  catch(e){error.textContent=LumiCloud.friendly(e)}finally{button.disabled=false}
+
 });
 
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
   let refreshing=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!refreshing){refreshing=true;location.reload()}});window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(registration=>registration.update()).catch(()=>{}));
 }
 
-function refreshPoints(){points=readPoints();const balance=document.getElementById("home-balance");if(balance)balance.textContent="⭐ "+points+" LUMI";document.querySelectorAll("[data-wallet-balance]").forEach(el=>el.textContent=points);}
-addEventListener("lumi:balance",refreshPoints);addEventListener("storage",refreshPoints);addEventListener("pageshow",refreshPoints);addEventListener("focus",refreshPoints);document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshPoints()});refreshPoints();
+function refreshPoints(){points=readPoints();const balance=$('home-balance');if(balance)balance.textContent=points===null?'Balans yüklənir…':'⭐ '+points+' LUMI';document.querySelectorAll('[data-wallet-balance]').forEach(el=>el.textContent=points===null?'—':points)}
+function applyCloud(){const state=LumiCloud.state;account=state.account;signedIn=state.status==='signedIn';refreshPoints();const buttons=[$('login-open'),$('signup-open'),$('returning-continue')];buttons.forEach(b=>b.disabled=state.status==='loading');const avatar=$('profile-open').querySelector('img');if(account&&window.LumiCommunity){avatar.src=account.avatarUrl||LumiCommunity.avatar(account.avatarIndex);avatar.style.transform='none'}if(!cloudBooted&&state.status!=='loading'){cloudBooted=true;if(signedIn&&location.hash==='#home')showHome();else showWelcome();if(state.error)showToast(LumiCloud.friendly(state.error))}else if(!signedIn&&!homePage.hidden){closeHomeModal();showWelcome()}}
+addEventListener('lumi:cloud',applyCloud);addEventListener('lumi:balance',refreshPoints);LumiCloud.ready.then(applyCloud);applyCloud();
+$('main-password-reset').onclick=async()=>{const email=$('login-form').elements.email;if(!email.value.trim()||!email.reportValidity()){$('login-error').textContent='Əvvəlcə e-poçt ünvanını yaz.';return}const button=$('main-password-reset');button.disabled=true;try{await LumiServer.resetPassword(email.value);$('login-error').textContent='Bu ünvanda hesab varsa, şifrə bərpası məktubu göndəriləcək.'}catch(e){$('login-error').textContent=LumiCloud.friendly(e)}finally{button.disabled=false}};
+$('main-resend').onclick=async()=>{const email=$('login-form').elements.email;if(!email.value.trim()||!email.reportValidity())return;const button=$('main-resend');button.disabled=true;try{await LumiServer.resendConfirmation(email.value);$('login-error').textContent='Təsdiq məktubu üçün sorğu göndərildi. E-poçtunu yoxla.'}catch(e){$('login-error').textContent=LumiCloud.friendly(e)}finally{button.disabled=false}};

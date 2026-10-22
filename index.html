@@ -77,7 +77,7 @@
           <p class="form-error" id="login-error" role="alert"></p>
           <button class="action action-primary submit-action" type="submit">Giriş et</button>
         </form>
-        <p class="switch-auth">Hesabın yoxdur? <button id="login-to-signup" type="button">Qeydiyyatdan keç</button></p>
+        <p class="switch-auth"><button class="text-button" id="main-password-reset" type="button">Şifrəni unutmusansa</button><br><button class="text-button" id="main-resend" type="button">Təsdiq məktubunu yenidən göndər</button></p><p class="switch-auth">Hesabın yoxdur? <button id="login-to-signup" type="button">Qeydiyyatdan keç</button></p>
       </div>
     </section>
 
@@ -105,8 +105,9 @@
 <article class="campaign-card premium-slide"><div class="mascot-window premium-art"><img src="assets-mascot-04.png" alt="Oyun oynayan LUMI maskotu" draggable="false"></div><div class="campaign-copy"><span class="eyebrow">7 GÜN RAHAT OYUN</span><h2>Reklamsız LUMI</h2><p>7 günlük reklamsız istifadə — 1,99 AZN.</p><button class="promo-button" id="premium-open">Təklifə bax</button></div></article>
 </div><div class="campaign-nav"><button id="campaign-prev" aria-label="Əvvəlki təklif">←</button><div id="campaign-dots"></div><button id="campaign-next" aria-label="Növbəti təklif">→</button></div></section>
 <button id="play-bonus" hidden>Oyna</button>
-        <button class="ranking-entry" id="ranking-open" type="button"><span class="ranking-medal">🏆</span><span><strong>LUMI liderləri</strong><small>Xalını müqayisə et, zirvəyə yüksəl</small></span><b>→</b></button>
-        <section class="games-section" aria-label="Oyunlar">
+        <section class="bonus-hub" aria-label="LUMI bonusları"><button id="hourly-bonus" class="bonus-entry"><span>☀️</span><span><strong>Saatlıq hədiyyən</strong><small>100 LUMI xalın hazırdır · Gəl və topla</small></span><b>+100</b></button><button id="daily-bonus" class="bonus-entry"><span>✨</span><span><strong>Gündəlik maskot bonusu</strong><small>30 saniyə · Hər toxunuş +1 LUMI</small></span><b>Oyna</b></button></section>
+<button class="ranking-entry" id="ranking-open" type="button"><span class="ranking-medal">🏆</span><span><strong>LUMI liderləri</strong><small>Xalını müqayisə et, zirvəyə yüksəl</small></span><b>→</b></button>
+        <p class="cloud-game-note">Oyunlar hazırda demo rejimindədir. Oyun xalları server balansına hələ köçürülmür.</p><section class="games-section" aria-label="Oyunlar">
           <div class="section-heading"><h2>Oyunlar</h2><span id="home-balance" class="home-balance" aria-live="polite">⭐ 0 LUMI</span></div>
           <div class="game-carousel" id="game-carousel" tabindex="0" aria-label="Oyun karuseli, sağa və sola sürüşdürün">
             <button class="game-card" data-game="flappy" type="button" aria-label="Flappy Bird oyununu aç"><img src="assets-game-flappy.png" alt=""></button>
@@ -115,7 +116,7 @@
             <button class="game-card" data-game="fruit" type="button" aria-label="Fruit Ninja oyununu aç"><img src="assets-game-fruit.png" alt=""></button>
             <button class="game-card silly-card" data-game="sillycat" type="button" aria-label="Silly Cat oyununu aç"><span class="silly-cat-art" aria-hidden="true">🐈</span><strong>SILLY CAT</strong><small>YOLU KEÇ!</small></button>
             <button class="game-card blast-card" data-game="blast" type="button" aria-label="Block Blast oyununu aç"><span class="blast-card-board" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><strong>BLOCK BLAST</strong><small>SÜRÜŞDÜR · YERLƏŞDİR</small></button>
-            <button class="game-card coming-card" data-game="soon" type="button" aria-label="Yeni oyunlar tezliklə"><span class="coming-icon">✦</span><strong>YENİ OYUNLAR</strong><small>TEZLİKLƏ</small></button>
+            <a class="game-card daily-card" href="./daily-bonus.html" aria-label="Gündəlik maskot bonusu"><img src="assets-mascot-01.png" alt="Gündəlik LUMI bonusu"><strong>GÜNDƏLİK BONUS</strong><small>30 SANİYƏ · TOXUN VƏ QAZAN</small></a><button class="game-card coming-card" data-game="soon" type="button" aria-label="Yeni oyunlar tezliklə"><span class="coming-icon">✦</span><strong>YENİ OYUNLAR</strong><small>TEZLİKLƏ</small></button>
           </div>
           <p class="swipe-hint">Daha çox oyun üçün sürüşdür <span>⟶</span></p>
         </section>
@@ -125,10 +126,15 @@
     <div id="home-modal-root"></div>
     <div class="toast" id="toast" role="status"></div>
   </main>
-  <script src="lumi-wallet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="server-config.js"></script>
+<script src="server-client.js"></script>
+<script src="lumi-cloud.js"></script>
+<script src="lumi-wallet.js"></script>
 <script src="lumi-ads.js"></script>
   <script src="app.js"></script>
 <script src="lumi-community.js"></script>
 <script src="lumi-statistics.js"></script>
+<script src="lumi-rewards.js"></script>
 </body>
 </html>
