@@ -64,6 +64,7 @@ function showHome() {
   loginOverlay.hidden = true;
   successPage.hidden = true;
   homePage.hidden = false;
+  if(location.hash!=='#home')history.replaceState(null,'','#home');
   $('home-page').scrollTop=0;
   $('app').scrollTop=0;
 }
@@ -86,7 +87,7 @@ function showNotifications() {
 }
 function showProfile(){location.href='./profile.html'}
 function escapeHTML(value) { return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function showGiftDetails(){refreshPoints();const percent=Math.min(100,points/5000*100);openHomeModal(`<button class="home-modal-close" data-home-close aria-label="Bağla">×</button><span class="eyebrow">TEZLİKLƏ</span><h2>5000 LUMI · 10 AZN</h2><img class="prize-preview" src="assets-prize-10.png" alt="10 AZN LUMI kartı"><p>Kampaniya müddətində 5000 xala ilk çatan 5 nəfərin hər biri 10 AZN mükafat qazanacaq.</p><div class="profile-row">Balansın: <b>${points} / 5000 LUMI</b></div><progress max="100" value="${percent}"></progress><p>Kampaniya hələ başlamayıb. Tarixlər, iştirak şərtləri və təsdiqlənmiş qaliblər burada yayımlanacaq.</p><button class="action action-primary" data-home-close>Oynamağa davam et</button>`)}
+function showGiftDetails(){refreshPoints();const percent=Math.min(100,points/10000*100);openHomeModal(`<button class="home-modal-close" data-home-close aria-label="Bağla">×</button><span class="eyebrow">TEZLİKLƏ</span><h2>10000 LUMI · 5 AZN</h2><img class="prize-preview" src="assets-prize-5.svg" alt="5 AZN LUMI kartı"><p>Kampaniya müddətində 10000 xala ilk çatan 5 nəfərin hər biri 5 AZN mükafat qazanacaq.</p><div class="profile-row">Balansın: <b>${points} / 10000 LUMI</b></div><progress max="100" value="${percent}"></progress><p>Kampaniya hələ başlamayıb. Tarixlər, iştirak şərtləri və təsdiqlənmiş qaliblər burada yayımlanacaq.</p><button class="action action-primary" data-home-close>Oynamağa davam et</button>`)}
 function startHomeGame(kind) {
   if (kind==='soon') { showToast('Yeni oyunlar tezliklə əlavə olunacaq.'); return; }
   const details={
@@ -223,7 +224,9 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
 }
 
 function refreshPoints(){points=readPoints();const balance=$('home-balance');if(balance)balance.textContent=points===null?'Balans yüklənir…':'⭐ '+points+' LUMI';document.querySelectorAll('[data-wallet-balance]').forEach(el=>el.textContent=points===null?'—':points)}
-function applyCloud(){const state=LumiCloud.state;account=state.account;signedIn=state.status==='signedIn';refreshPoints();const buttons=[$('login-open'),$('signup-open'),$('returning-continue')];buttons.forEach(b=>b.disabled=state.status==='loading');const avatar=$('profile-open').querySelector('img');if(account&&window.LumiCommunity){avatar.src=account.avatarUrl||LumiCommunity.avatar(account.avatarIndex);avatar.style.transform='none'}if(!cloudBooted&&state.status!=='loading'){cloudBooted=true;if(signedIn&&location.hash==='#home')showHome();else showWelcome();if(state.error)showToast(LumiCloud.friendly(state.error))}else if(!signedIn&&!homePage.hidden){closeHomeModal();showWelcome()}}
+function applyCloud(){const state=LumiCloud.state;account=state.account;signedIn=state.status==='signedIn';refreshPoints();const buttons=[$('login-open'),$('signup-open'),$('returning-continue')];buttons.forEach(b=>b.disabled=state.status==='loading');const avatar=$('profile-open').querySelector('img');if(account&&window.LumiCommunity){avatar.src=account.avatarUrl||LumiCommunity.avatar(account.avatarIndex);avatar.style.transform='none'}if(!cloudBooted&&state.status!=='loading'){cloudBooted=true;if(signedIn)showHome();else showWelcome();if(state.error)showToast(LumiCloud.friendly(state.error))}else if(signedIn&&location.hash==='#home'&&homePage.hidden){showHome()}else if(!signedIn&&!homePage.hidden){closeHomeModal();showWelcome()}}
 addEventListener('lumi:cloud',applyCloud);addEventListener('lumi:balance',refreshPoints);LumiCloud.ready.then(applyCloud);applyCloud();
 $('main-password-reset').onclick=async()=>{const email=$('login-form').elements.email;if(!email.value.trim()||!email.reportValidity()){$('login-error').textContent='Əvvəlcə e-poçt ünvanını yaz.';return}const button=$('main-password-reset');button.disabled=true;try{await LumiServer.resetPassword(email.value);$('login-error').textContent='Bu ünvanda hesab varsa, şifrə bərpası məktubu göndəriləcək.'}catch(e){$('login-error').textContent=LumiCloud.friendly(e)}finally{button.disabled=false}};
 $('main-resend').onclick=async()=>{const email=$('login-form').elements.email;if(!email.value.trim()||!email.reportValidity())return;const button=$('main-resend');button.disabled=true;try{await LumiServer.resendConfirmation(email.value);$('login-error').textContent='Təsdiq məktubu üçün sorğu göndərildi. E-poçtunu yoxla.'}catch(e){$('login-error').textContent=LumiCloud.friendly(e)}finally{button.disabled=false}};
+
+addEventListener('hashchange',()=>{if(location.hash==='#home'&&signedIn)showHome()});addEventListener('pageshow',()=>LumiCloud.ready.then(()=>{if(LumiCloud.state.status==='signedIn'&&location.hash==='#home'){account=LumiCloud.state.account;signedIn=true;showHome()}}));
