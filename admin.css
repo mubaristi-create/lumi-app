@@ -2,3 +2,5 @@
 #campaign-preview{display:block;width:100%;max-width:480px;aspect-ratio:3/2;object-fit:contain;border-radius:16px;border:1px solid #ffc37944;background:#16090e;margin-top:12px}#campaign-preview[hidden]{display:none}#campaign-form small{font-size:11px;line-height:1.6;color:#dabda9}#private-notification{margin-top:24px;padding-top:20px;border-top:1px solid #ffc37933}
 
 #campaign-preview{width:min(100%,240px);height:auto;max-height:360px;aspect-ratio:2/3;object-fit:contain;background:#1c0b0e;border-radius:14px}
+
+#admin-mfa-dialog{width:min(90vw,420px);border:1px solid #ffbd6755;border-radius:22px;background:#211015;color:#ffefdc;padding:24px}#admin-mfa-dialog::backdrop{background:#050308c9}#admin-mfa-dialog form{display:grid;gap:14px}#admin-mfa-dialog img{width:220px;max-width:100%;justify-self:center;background:white;padding:12px}#admin-mfa-dialog p{line-height:1.6}#admin-mfa-dialog input{display:block;width:100%;letter-spacing:.3em;margin-top:10px}#admin-mfa-dialog [hidden]{display:none}
