@@ -35,10 +35,10 @@ jobs:
           await fs.mkdir(out,{recursive:true});
           // Only application assets at repository root. Never SQL, work/, native sources or audit evidence.
           for(const name of await fs.readdir(root)){
-           if(!/\.(html|css|js|png|svg|webmanifest)$/.test(name)&&name!=='.nojekyll')continue;
+           if(!/\.(html|css|js|jpg|png|svg|webmanifest)$/.test(name)&&name!=='.nojekyll')continue;
            let data=await fs.readFile(path.join(root,name));
            if(name.endsWith('.html')){
-            let html=data.toString(),handlers=[];
+            let html=data.toString().replace(/\r\n?/g,"\n"),handlers=[];
             html=html.replace(/\s(on[a-z]+)="([^"]*)"/gi,(_,attr,body)=>{const id='lumi-handler-'+handlers.length;handlers.push({id,event:attr.slice(2),body:body.replace(/&quot;/g,'"').replace(/&amp;/g,'&')});return ' data-'+id+'=""'});
             if(handlers.length)html=html.replace('</body>','<script>'+handlers.map(h=>'document.querySelector("[data-'+h.id+']").addEventListener('+JSON.stringify(h.event)+',function(event){'+h.body+'});').join('\n')+'</script></body>');
             const hashes=[...html.matchAll(/<script\b(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>"'sha256-"+createHash('sha256').update(m[1]).digest('base64')+"'");
@@ -49,7 +49,7 @@ jobs:
            await fs.writeFile(path.join(out,name),data);
           }
           console.log('Static site prepared in dist; script CSP hashes generated.');
-          
+
           BUILD_SITE
       - name: Configure Pages
         uses: actions/configure-pages@v5
