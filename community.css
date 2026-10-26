@@ -45,3 +45,5 @@
 
 /* Compact offers; arrows share the same optical center. */
 .campaign-nav>button{display:grid;place-items:center;padding:0;line-height:1;font-family:Arial,sans-serif}.campaign-card{height:214px}.campaign-card .campaign-copy{padding:14px 12px}.campaign-copy h2{font-size:19px;margin:6px 0}.campaign-copy p{margin-bottom:10px;font-size:10.5px}@media(max-width:380px){.campaign-card{height:208px}.campaign-copy h2{font-size:17px}}
+
+.campaign-nav>button{display:grid;place-items:center;padding:0!important;line-height:1;flex:none}.campaign-nav>button svg{display:block;width:18px;height:18px;margin:0;transform:none}.campaign-section .section-heading{padding-bottom:6px}.campaign-card{height:196px}.campaign-nav{margin:7px 0 0}.home-content{gap:14px}.home-header{padding-bottom:16px}.profile-header>a{display:grid;place-items:center;width:36px;height:36px;padding:0;line-height:1;border:1px solid #ffd28a30;border-radius:12px}.profile-header>a svg{display:block}@media(max-width:380px){.campaign-card{height:194px}.campaign-copy h2{font-size:16px}.campaign-copy p{font-size:10px;margin-bottom:8px}}

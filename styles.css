@@ -170,3 +170,5 @@ input:focus { border-color:#ffa832; box-shadow:0 0 0 3px #ffa83220; }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; } }
 
 .home-balance{margin-left:auto;padding:6px 10px;border:1px solid #ffcf7044;border-radius:99px;background:#ffc45f16;color:#ffdc8b;font-size:11px;font-weight:850;white-space:nowrap}.section-heading{display:flex;align-items:center;gap:10px}
+
+.footer,.home-footer{letter-spacing:.15px;font-family:var(--body-font,"Segoe UI",sans-serif);font-size:10px;font-weight:500;line-height:1.5}.back-button{display:grid;place-items:center;padding:0}.back-button svg{display:block;margin:0}

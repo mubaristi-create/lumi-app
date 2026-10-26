@@ -2,7 +2,7 @@
 
 .wheel.dense .letter{width:32px;height:32px;font-size:22px}
 
-.world-1{--landscape:url("assets-eyo-world-1.svg")}.world-2{--landscape:url("assets-eyo-world-2.svg")}.world-3{--landscape:url("assets-eyo-world-3.svg")}.world-4{--landscape:url("assets-eyo-world-4.svg")}.world-5{--landscape:url("assets-eyo-world-5.svg")}
+.world-1{--landscape:url("assets-eyo-photo-1.jpg")}.world-2{--landscape:url("assets-eyo-photo-2.jpg")}.world-3{--landscape:url("assets-eyo-photo-3.jpg")}.world-4{--landscape:url("assets-eyo-photo-4.jpg")}.world-5{--landscape:url("assets-eyo-photo-5.jpg")}
 .level-map{background-image:var(--landscape),radial-gradient(ellipse at center,var(--wash),transparent 75%);background-repeat:no-repeat;background-size:100% auto,cover;background-position:center top}.play-mode main{background-image:var(--landscape),linear-gradient(var(--paper),var(--wash));background-repeat:no-repeat;background-size:100% auto,cover;background-position:center bottom}
 
 .header-currencies{flex:1;min-width:0;justify-content:flex-end}.header-currencies button{min-width:0}.header-currencies b{max-width:52px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -18,8 +18,12 @@ html,body{background:#080709;color:#fff5e9}.eyo-app{background:radial-gradient(e
 .wheel .letter:focus-visible{outline:2px solid #ffdc98;outline-offset:-4px}
 
 /* Each region keeps its illustrated landscape behind the map and game. */
-.world-1{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-1.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-1{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-1.svg")!important}
-.world-2{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-2.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-2{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-2.svg")!important}
-.world-3{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-3.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-3{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-3.svg")!important}
-.world-4{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-4.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-4{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-4.svg")!important}
-.world-5{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-5.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-5{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-5.svg")!important}
+.world-1{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-photo-1.jpg")!important;background-size:cover!important;background-position:center!important}.world-card.world-1{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-photo-1.jpg")!important}
+.world-2{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-photo-2.jpg")!important;background-size:cover!important;background-position:center!important}.world-card.world-2{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-photo-2.jpg")!important}
+.world-3{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-photo-3.jpg")!important;background-size:cover!important;background-position:center!important}.world-card.world-3{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-photo-3.jpg")!important}
+.world-4{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-photo-4.jpg")!important;background-size:cover!important;background-position:center!important}.world-card.world-4{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-photo-4.jpg")!important}
+.world-5{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-photo-5.jpg")!important;background-size:cover!important;background-position:center!important}.world-card.world-5{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-photo-5.jpg")!important}
+.eyo-app.play-mode[class*="world-"]{background-size:cover!important;background-position:center!important;background-attachment:scroll!important}.play-mode .crossword-area{background:#10090d30;border-radius:22px}.play-mode .wheel{background:#1a0a12c9;backdrop-filter:blur(4px)}.eyo-header>a.icon-button{display:grid;place-items:center;padding:0;line-height:1}.eyo-header>a.icon-button svg{display:block;flex:none}
+
+/* One continuous photographic scene, with a consistent contrast veil. */
+.eyo-app.play-mode{background-image:linear-gradient(#0a0c15a6,#0a0c1599),var(--landscape)!important}.eyo-app.play-mode main{background:transparent!important}.play-mode .crossword-area{background:#0b0b1420}.play-mode .play-tools .tool,.play-mode .found-note,.play-mode .selected-word:empty:after{color:#ffe7c4;text-shadow:0 1px 4px #000}.play-mode .play-top small,.play-mode .mode-label{color:#ffe7d5;text-shadow:0 1px 4px #000}.level-map{background:none!important}.world-card .world-art{display:none}

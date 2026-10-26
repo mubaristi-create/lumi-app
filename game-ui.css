@@ -47,3 +47,8 @@ body>.app,body>.game-app{height:100svh;height:var(--lumi-vh,100dvh);min-height:0
 #gameover-screen #again,#gameover-screen #over-menu{display:block;width:100%;margin-top:12px}#gameover-screen #over-menu{background:#ffffff08;color:#ffdcab;border-color:#ffc47740}
 
 #tower-level .panel,#tower-level .dialog,#tower-level>section{padding:28px 24px!important;box-sizing:border-box;max-width:calc(100% - 32px)}#tower-congrats{display:block;margin:16px 0 12px;line-height:1.35;overflow-wrap:anywhere}#tower-motivation{margin:12px 0 18px;line-height:1.65}#tower-earned{display:block;margin:16px 0}#tower-level-note{display:block;margin:14px 0}
+
+/* Icon geometry is centered independently of font baselines. */
+.lumi-game-header>a,.back,.back-button{display:grid;place-items:center;padding:0!important;line-height:1!important}.lumi-game-header>a>svg,.back>svg,.back-button>svg{display:block;flex:none;margin:0!important;transform:none!important}.panel-actions>a,.result-home,.lgs-action{display:flex;align-items:center;justify-content:center;text-align:center;gap:8px;line-height:1.4}.dialog .btn,.dialog .button,.panel .control{display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.4;gap:8px}
+
+.touch-controls button,.controls .control{display:grid;place-items:center;padding:0;line-height:1}.touch-controls button svg,.controls .control svg{display:block;margin:0}
