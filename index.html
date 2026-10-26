@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="az">
 <head>
+<script>if(location.hash==="#home")document.documentElement.classList.add("restoring-home");</script>
+<style>.restoring-home #welcome{display:none!important}.restoring-home #home-page[hidden]:before{content:""}</style>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1a001e">
@@ -19,7 +21,7 @@
 </head>
 <body>
   <main class="device" id="app">
-    <section class="welcome" id="welcome" aria-label="LUMI-yə xoş gəlmisiniz">
+    <section class="welcome" hidden id="welcome" aria-label="LUMI-yə xoş gəlmisiniz">
       <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
       <div class="brand"><img class="brand-logo" src="assets-logo-icon.png" alt="LUMI"></div>
       <h1 class="greeting">Lumi <span>Sizi</span> Salamlayır</h1>
@@ -54,6 +56,7 @@
         <label>İstifadəçi adı<input name="username" autocomplete="username" placeholder="İstifadəçi adın" required minlength="3"></label>
         <label>E-poçt<input name="email" type="email" autocomplete="email" placeholder="ad@numune.az" required></label>
         <label>Telefon nömrəsi<input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+994 50 123 45 67" required></label>
+        <label>Promokod (istəyə bağlı)<input name="promoCode" autocomplete="off" maxlength="40" placeholder="Dostunun promokodu"></label>
         <label>Şifrə<input name="password" type="password" autocomplete="new-password" placeholder="Ən azı 8 simvol" required minlength="8"></label>
         <label>Şifrənin təkrarı<input name="confirmPassword" type="password" autocomplete="new-password" placeholder="Şifrəni yenidən yaz" required minlength="8"></label>
         <p class="form-error" id="signup-error" role="alert"></p>
@@ -118,7 +121,7 @@
           <p class="swipe-hint">Daha çox oyun üçün sürüşdür <span>⟶</span></p>
         </section>
 <button id="play-bonus" hidden>Oyna</button>
-        <section class="bonus-hub" aria-label="LUMI bonusları"><button id="hourly-bonus" class="bonus-entry"><span>☀️</span><span><strong>Saatlıq hədiyyən</strong><small>100 LUMI xalın hazırdır · Gəl və topla</small></span><b>+100</b></button><button id="daily-bonus" class="bonus-entry"><span>✨</span><span><strong>Gündəlik maskot bonusu</strong><small>60 saniyə · Hər toxunuş +1 LUMI</small></span><b>Oyna</b></button></section>
+        <section class="bonus-hub" aria-label="LUMI bonusları"><button id="hourly-bonus" hidden aria-hidden="true"></button><button id="daily-bonus" class="bonus-entry"><span>✨</span><span><strong>Gündəlik maskot bonusu</strong><small>60 saniyə · Hər toxunuş +1 LUMI</small></span><b>Oyna</b></button></section>
 <button class="ranking-entry" id="ranking-open" type="button"><span class="ranking-medal">🏆</span><span><strong>LUMI liderləri</strong><small>Xalını müqayisə et, zirvəyə yüksəl</small></span><b>→</b></button>
         <p class="cloud-game-note">Oyunlarda təsdiqlənən LUMI xalları hesabının əsas balansına əlavə olunur.</p>
       </div>

@@ -16,3 +16,10 @@ html,body{background:#080709;color:#fff5e9}.eyo-app{background:radial-gradient(e
 .wheel .letter,.wheel .letter:active:not(:disabled),.wheel .letter.selected,.wheel .letter:focus{transform:translate(-50%,-50%);box-shadow:none;outline:none;transition:color .12s ease}
 .wheel .letter.selected{background:linear-gradient(145deg,#ffdc98,#f0ac58);color:#381810}
 .wheel .letter:focus-visible{outline:2px solid #ffdc98;outline-offset:-4px}
+
+/* Each region keeps its illustrated landscape behind the map and game. */
+.world-1{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-1.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-1{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-1.svg")!important}
+.world-2{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-2.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-2{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-2.svg")!important}
+.world-3{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-3.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-3{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-3.svg")!important}
+.world-4{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-4.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-4{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-4.svg")!important}
+.world-5{background-image:linear-gradient(#130a18aa,#130a18dd),url("assets-eyo-world-5.svg")!important;background-size:cover!important;background-position:center!important}.world-card.world-5{background-image:linear-gradient(90deg,#160c1cdd,#160c1c55),url("assets-eyo-world-5.svg")!important}

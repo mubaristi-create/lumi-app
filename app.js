@@ -16,6 +16,7 @@ function showToast(message) {
   showToast.timer = setTimeout(() => toast.classList.remove('show'), 2600);
 }
 function showWelcome() {
+  document.documentElement.classList.remove("restoring-home");
   const returning=Boolean(signedIn && account);
   welcome.hidden = false;
   signupPage.hidden = true;
@@ -55,6 +56,7 @@ function showSuccess(kind) {
     : 'Giriş uğurludur. Hesabına daxil oldun.';
 }
 function showHome() {
+  document.documentElement.classList.remove("restoring-home");
   if(!signedIn){showWelcome();showToast('Hesabına daxil ol.');return;}
 
   globalThis.LumiAds?.activate();
