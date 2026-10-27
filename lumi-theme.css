@@ -41,3 +41,6 @@ input{background:#17090dd9!important;border-color:#ffc07738!important}input:focu
 .brand-logo{width:66px!important;height:auto!important;object-fit:contain}.lumi-game-header .brand img{width:28px!important;max-height:26px!important;object-fit:contain}.brand>img[src="assets-logo-icon.png"]{object-fit:contain}.signup-page .brand-logo{width:38px!important}
 
 .welcome>.brand,.signup-page>.brand,.success-page>.brand{display:flex;justify-content:center;align-items:center}.welcome .brand-logo,.signup-page .brand-logo,.success-page .brand-logo{margin-inline:auto}
+
+/* Keep registration branding separate from the first form heading. */
+.signup-page .mini-brand{width:66px;height:58px;top:calc(env(safe-area-inset-top) + 20px);display:grid;place-items:center}.signup-page .mini-brand img{width:66px;height:58px;object-fit:contain}.signup-page{padding-top:calc(env(safe-area-inset-top) + 106px)}.signup-page>.eyebrow{position:relative;margin-top:0;line-height:1.5}.signup-page .back-button{top:calc(env(safe-area-inset-top) + 20px)}

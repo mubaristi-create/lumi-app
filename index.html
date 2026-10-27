@@ -2,7 +2,7 @@
 <html lang="az">
 <head>
 <script>if(location.hash==="#home")document.documentElement.classList.add("restoring-home");</script>
-<style>.restoring-home #welcome{display:none!important}.restoring-home #home-page[hidden]:before{content:""}</style>
+<style>.restoring-home #welcome{display:none!important}.restoring-home #home-page[hidden]:before{content:""}#home-loading{display:none}.restoring-home #home-loading{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#16090e;color:#ffca75;font:14px "Segoe UI",sans-serif}.restoring-home #home-loading span{width:28px;height:28px;border:2px solid #ffca7533;border-top-color:#ffca75;border-radius:50%;animation:homeLoad 1s linear infinite}@keyframes homeLoad{to{transform:rotate(360deg)}}</style>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1a001e">
@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="community.css">
 </head>
 <body>
+  <div id="home-loading" role="status" aria-live="polite"><span></span>Ana səhifə hazırlanır…</div>
   <main class="device" id="app">
     <section class="welcome" hidden id="welcome" aria-label="LUMI-yə xoş gəlmisiniz">
       <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>

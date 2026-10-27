@@ -178,7 +178,7 @@ document.addEventListener('keydown', event => {
   if (event.key==='Escape' && homeModalRoot.firstElementChild) closeHomeModal();
 });
 
-showWelcome();
+if(location.hash!=="#home")showWelcome();
 
 $('signup-form').addEventListener('submit', async event => {
   event.preventDefault();
