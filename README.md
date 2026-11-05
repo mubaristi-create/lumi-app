@@ -30,3 +30,12 @@ Block and 2048 validate board operations on the server. Action games validate ev
 ## Development
 
 Use HTTPS for production and email callbacks. Use a local web server for local previews. Auth is persisted by Supabase; returning signed-in users land on the home screen. Physical Android/iPhone testing is separate from desktop/runtime checks.
+
+
+## November 5 mobile test update
+
+EYO has 400 compact common-word levels (4–6 targets), free starter letters and non-repeating paid hints. New mascot artwork keeps its original proportions. Admin controls configure server reward rules, audited coins, badges, individual balance resets and weekly rounds. Weekly scores start separately from existing wallet balances; previous ledger history remains intact.
+
+Android 1.5.0 (8) includes Google demo AdMob SDK units, optional rewarded game coins and local notification reminders. Full-screen ads wait for natural transitions and an eligibility interval (default 180 seconds, minimum 120); no universal AdMob interval is claimed. Rewarded ads never add cash-redeemable LUMI. Test coin claims and Block revives are not production SSV verification. Remote winner/rank push remains queued until Firebase is configured. No email-confirmation settings were changed.
+
+Migrations 018–020 are additive. Production cash campaigns still require stronger action-game/bot validation, verified ad callbacks and operational prize review.
