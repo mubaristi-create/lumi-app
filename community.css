@@ -59,3 +59,7 @@
 .campaign-card .campaign-copy p{font-size:11px;line-height:1.55;overflow:visible;display:block;-webkit-line-clamp:unset}
 @media(max-width:360px){.campaign-card{grid-template-columns:40% minmax(0,1fr);min-height:222px}.campaign-card .campaign-copy{padding:14px 10px}.campaign-card .campaign-copy h2{font-size:16px}.campaign-card .campaign-copy p{font-size:10px}.campaign-card>.mascot-window{min-height:222px}}
 .campaign-card .campaign-copy h2{font-size:17px;line-height:1.24}.campaign-card .campaign-copy p{font-size:10.5px;line-height:1.5}.campaign-card .campaign-copy{padding:15px 12px}
+/* Portrait campaign art fills the complete left column, edge to edge. */
+.campaign-card>.campaign-art{position:relative;min-width:0;min-height:208px;align-self:stretch;overflow:hidden;background:#35121d}
+.campaign-card>.campaign-art>img{position:absolute!important;inset:0!important;display:block;width:100%!important;height:100%!important;max-height:none!important;max-width:none!important;aspect-ratio:auto!important;object-fit:cover!important;object-position:50% 50%!important;padding:0!important;margin:0!important;border-radius:0}
+@media(max-width:360px){.campaign-card>.campaign-art{min-height:222px}}
