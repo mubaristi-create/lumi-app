@@ -172,3 +172,18 @@ input:focus { border-color:#ffa832; box-shadow:0 0 0 3px #ffa83220; }
 .home-balance{margin-left:auto;padding:6px 10px;border:1px solid #ffcf7044;border-radius:99px;background:#ffc45f16;color:#ffdc8b;font-size:11px;font-weight:850;white-space:nowrap}.section-heading{display:flex;align-items:center;gap:10px}
 
 .footer,.home-footer{letter-spacing:.15px;font-family:var(--body-font,"Segoe UI",sans-serif);font-size:10px;font-weight:500;line-height:1.5}.back-button{display:grid;place-items:center;padding:0}.back-button svg{display:block;margin:0}
+/* Welcome artwork stays in its own row and never intercepts auth controls. */
+#welcome{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:56px auto minmax(100px,1fr) 2px auto 16px;gap:14px;height:100svh;min-height:520px;padding:calc(env(safe-area-inset-top) + 20px) 20px calc(env(safe-area-inset-bottom) + 18px);isolation:isolate}
+#welcome>.brand{position:relative;inset:auto;grid-row:1;justify-self:center;align-self:center;width:56px;height:50px;transform:none;animation:fade-in .5s ease both;pointer-events:none}
+#welcome>.brand img{width:100%;height:100%;object-fit:contain}
+#welcome>.greeting{position:relative;inset:auto;grid-row:2;align-self:center;font-size:clamp(20px,5.7vw,29px);line-height:1.3;white-space:normal;animation:fade-in .5s ease both;pointer-events:none}
+#welcome>.mascots{position:relative;inset:auto;grid-row:3;justify-self:center;align-self:start;width:min(88%,340px);height:100%;max-height:340px;min-width:0;min-height:0;overflow:hidden;animation:fade-in .6s ease both;pointer-events:none}
+#welcome>.mascots img{position:absolute;inset:0;width:100%;height:100%;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;object-position:center top;animation:none;transform:none;pointer-events:none;user-select:none;-webkit-user-drag:none}
+#welcome>.mascots *,#welcome>.ambient,#welcome>.horizon{pointer-events:none}
+#welcome>.horizon{position:relative;inset:auto;grid-row:4;width:84%;justify-self:center;height:2px;animation:none;opacity:.45}
+#welcome>.actions,#welcome>.returning-actions{position:relative;inset:auto;grid-row:5;justify-self:center;width:min(100%,340px);margin:0;z-index:3;pointer-events:auto}
+#welcome>.actions{gap:12px}
+#welcome>.actions .action,#welcome>.returning-actions .action{min-height:52px;font-size:clamp(17px,4.7vw,21px);line-height:1.2}
+#welcome>.footer{position:relative;inset:auto;grid-row:6;margin:0;align-self:center;line-height:16px;animation:none;pointer-events:none}
+@media(min-width:600px){#welcome{height:calc(100svh - 24px);min-height:520px}}
+@media(max-height:600px){#welcome{grid-template-rows:42px auto minmax(70px,1fr) 2px auto 14px;gap:10px;padding-top:calc(env(safe-area-inset-top) + 12px);padding-bottom:calc(env(safe-area-inset-bottom) + 12px)}#welcome>.brand{width:42px;height:40px}#welcome>.greeting{font-size:21px}#welcome>.actions{gap:10px}#welcome>.actions .action,#welcome>.returning-actions .action{min-height:48px;font-size:17px}}
