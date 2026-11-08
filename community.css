@@ -63,3 +63,5 @@
 .campaign-card>.campaign-art{position:relative;min-width:0;min-height:208px;align-self:stretch;overflow:hidden;background:#35121d}
 .campaign-card>.campaign-art>img{position:absolute!important;inset:0!important;display:block;width:100%!important;height:100%!important;max-height:none!important;max-width:none!important;aspect-ratio:auto!important;object-fit:cover!important;object-position:50% 50%!important;padding:0!important;margin:0!important;border-radius:0}
 @media(max-width:360px){.campaign-card>.campaign-art{min-height:222px}}
+
+.rank-badges{display:inline-flex;align-items:center;gap:4px}.rank-medal{display:inline-block;font-size:22px;line-height:1.2}.profile-rank-badges{display:flex;justify-content:center;gap:8px;margin:8px 0}.profile-rank-badges span{font-size:26px}

@@ -1,0 +1,16 @@
+[
+  {
+    "scene": "menu",
+    "seconds": 48,
+    "sampleRate": 22050,
+    "peak": 0.4296,
+    "frames": 1058400
+  },
+  {
+    "scene": "sakura",
+    "seconds": 48,
+    "sampleRate": 22050,
+    "peak": 0.4296,
+    "frames": 1058400
+  }
+]
