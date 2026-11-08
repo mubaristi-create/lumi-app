@@ -1,0 +1,48 @@
+name: Publish verified Lumi 1.6.4
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Merge verified release and remove transfer files
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git checkout main
+          git pull --ff-only origin main
+          git bundle verify lumi-1.6.4.bundle
+          git fetch ./lumi-1.6.4.bundle HEAD:refs/heads/lumi-verified-release
+          test "$(git rev-parse lumi-verified-release)" = '58cac1bbed2714f085d7c06d21f29175fd94a1c5'
+          git merge --no-ff -m 'Integrate verified Lumi Tiles 1.6.4 release' lumi-verified-release
+          git rm lumi-1.6.4.bundle .github/workflows/integrate-tiles.yml
+          git commit -m 'Remove completed release transfer files'
+          git push origin main
+      - name: Build integrated Lumi web
+        run: node scripts/build-site.mjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+          name: lumi-1-6-4-${{ github.run_id }}
+      - name: Publish
+        id: deploy
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: lumi-1-6-4-${{ github.run_id }}
+          timeout: 1800000
+
