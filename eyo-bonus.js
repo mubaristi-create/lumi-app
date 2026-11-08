@@ -8,7 +8,7 @@ function paint(){
   const b=root.querySelector('button'),note=root.querySelector('small');
   const remaining=Math.max(0,Math.ceil((deadline-performance.now())/1000));
   b.textContent=busy?'Yoxlanılır…':remaining?Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0')+' sonra':'Reklam izlə · +'+coins()+' sikkə';
-  b.disabled=busy||remaining>0||!data||!window.LumiNativeAds||EyoCloud.mode!=='server'||data.rules?.ads_enabled===false;
+  b.disabled=busy||remaining>0||!data||!window.LumiNativeAds||EyoCloud.mode!=='server'||data.rules?.ads_enabled===false||data.rules?.ad_ssv_enabled!==true;
   note.textContent=!window.LumiNativeAds?'Mükafatlı reklam Android tətbiqində açılır.':remaining?'Bonus yenilənəndə yenidən toplaya bilərsən.':'Reklamı tamamla, ipucları üçün '+coins()+' sikkə qazan. LUMI balansı dəyişmir.';
  });
 }
@@ -23,8 +23,7 @@ window.EyoCoinBonus={
   if(!window.LumiNativeAds)throw Error('Mükafatlı reklamı Android tətbiqində aça bilərsən.');
   busy=true;paint();
   try{
-   if(!pendingClaim){const started=await rpc('start');const ad=await LumiAds.rewardedAsync();if(!ad.rewarded)return {rewarded:false};pendingClaim=started.id;}
-   const result=await rpc('claim',pendingClaim);pendingClaim=null;
+   const ad=await LumiAds.rewardedAsync({placement:'eyo_coins'});if(!ad.verified)return {rewarded:false,pending:!!ad.pending};const result=ad.receipt;pendingClaim=null;
    await P.refresh(true);await EyoCloud.refresh();sync();
    return {rewarded:true,coins:result.coins};
   }finally{busy=false;paint();}

@@ -65,3 +65,6 @@
 @media(max-width:360px){.campaign-card>.campaign-art{min-height:222px}}
 
 .rank-badges{display:inline-flex;align-items:center;gap:4px}.rank-medal{display:inline-block;font-size:22px;line-height:1.2}.profile-rank-badges{display:flex;justify-content:center;gap:8px;margin:8px 0}.profile-rank-badges span{font-size:26px}
+
+/* Remove only the redundant top-three crowns; retain badges below names. */
+.lumi-podium{min-height:201px;margin-top:14px}.podium-player>img{margin-top:0}.podium-player>.rank-badges{margin:4px 0 2px;min-height:24px}
