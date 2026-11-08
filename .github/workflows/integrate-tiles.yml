@@ -31,9 +31,9 @@ jobs:
           git bundle verify lumi-1.6.4.bundle
           git fetch ./lumi-1.6.4.bundle HEAD:refs/heads/lumi-verified-release
           test "$(git rev-parse lumi-verified-release)" = '58cac1bbed2714f085d7c06d21f29175fd94a1c5'
-          git merge --no-ff -m 'Integrate verified Lumi Tiles 1.6.4 release' lumi-verified-release
-          git rm lumi-1.6.4.bundle .github/workflows/integrate-tiles.yml
-          git commit -m 'Remove completed release transfer files'
+          git diff --binary b41853fead8ecd0289074d8fffb896218aa848af lumi-verified-release -- . ':!.github/**' | git apply --index --binary
+          git rm lumi-1.6.4.bundle
+          git commit -m 'Integrate verified Lumi Tiles 1.6.4 release'
           git push origin main
       - name: Build integrated Lumi web
         run: node scripts/build-site.mjs
