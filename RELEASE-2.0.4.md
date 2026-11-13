@@ -7,7 +7,7 @@
 - Existing child/under-age ad policy, consent flow, accounts, balances, other games and weekly competition retained. Email confirmation unchanged.
 
 ## Validation
-150 puzzle uniqueness/solution checks; 33 authenticated server assertions (owner isolation, replay, hints/undo, pause, receipt verification and wallet/weekly balance); hosted UI flow; 90-second checkpoint/pause/resume/cooldown test; fixed-banner route coverage for all ten game routes; existing ad-stability regression; 17 V2 platform assertions and 22 weekly competition assertions. Browser viewport checks at 360×640 and 320×550 found no game-screen overflow. AAB build and bundle/signature validation completed separately.
+150 puzzle uniqueness/solution checks; 34 authenticated server assertions (owner isolation, replay, hints/undo, pause, receipt verification and wallet/weekly balance); hosted UI flow and network/wallet recovery; 90-second checkpoint/pause/resume/cooldown test; fixed-banner route coverage for all ten game routes; existing ad-stability regression; 17 V2 platform assertions and 22 weekly competition assertions. Browser viewport checks at 360×640 and 320×550 found no game-screen overflow. AAB build and bundle/signature validation completed separately.
 
 Physical-device AdMob fill, consent presentation and rewarded SSV delivery still require an installed-device test. Browser web version has no native AdMob SDK and does not simulate a paid ad. This release is not automatically uploaded to Play Console.
 

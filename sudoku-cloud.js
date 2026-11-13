@@ -3,7 +3,7 @@
 let owner=null,tail=Promise.resolve(),pending=null;
 const ready=(async()=>{await global.LumiCloud.ready;owner=global.LumiCloud.state.account?.id||null})();
 function key(){return 'lumi-sudoku-action:'+owner}
-async function rpc(name,args={}){await ready;if(!owner||global.LumiCloud.state.status!=='signedIn'||global.LumiCloud.state.account?.id!==owner)throw Error('Əsas səhifədə Lumi hesabına daxil ol.');const {data,error}=await global.LumiServer.client.rpc(name,args);if(error)throw error;return data}
+async function rpc(name,args={}){await ready;if(!owner||global.LumiCloud.state.status!=='signedIn'||global.LumiCloud.state.account?.id!==owner)throw Error('Əsas səhifədə Lumi hesabına daxil ol.');const {data,error}=await global.LumiServer.client.rpc(name,args);if(error){if(error.code==='P0001'&&!/rate|limit|çox.*sorğu|tez/i.test(error.message||''))remember(null);throw error}return data}
 function remember(item){pending=item;try{if(item)localStorage.setItem(key(),JSON.stringify(item));else localStorage.removeItem(key())}catch{if(item)throw Error('Sorğunu təhlükəsiz saxlamaq üçün brauzer yaddaşını aktiv et.')}}
 async function refresh(packet){if(packet?.won){await global.LumiCloud.refreshWallet();await global.LumiPlatform?.refresh?.(true)}return packet}
 async function flush(){if(!pending)return null;const item=pending;const packet=await rpc(item.name,item.args);await refresh(packet);remember(null);return packet}
