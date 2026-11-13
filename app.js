@@ -89,7 +89,7 @@ function showNotifications() {
 }
 function showProfile(){location.href='./profile.html'}
 function escapeHTML(value) { return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function showGiftDetails(){refreshPoints();const percent=Math.min(100,points/10000*100);openHomeModal(`<button class="home-modal-close" data-home-close aria-label="Bağla">×</button><span class="eyebrow">TEZLİKLƏ</span><h2>10000 LUMI · 5 AZN</h2><img class="prize-preview" src="assets-prize-5.svg" alt="5 AZN LUMI kartı"><p>Kampaniya müddətində 10000 xala ilk çatan 5 nəfərin hər biri 5 AZN mükafat qazanacaq.</p><div class="profile-row">Balansın: <b>${points} / 10000 LUMI</b></div><progress max="100" value="${percent}"></progress><p>Kampaniya hələ başlamayıb. Tarixlər, iştirak şərtləri və təsdiqlənmiş qaliblər burada yayımlanacaq.</p><button class="action action-primary" data-home-close>Oynamağa davam et</button>`)}
+function showGiftDetails(){window.LumiPlatform?.openWinners();}
 function startHomeGame(kind) {
   if (kind==='soon') { showToast('Yeni oyunlar tezliklə əlavə olunacaq.'); return; }
   const details={
