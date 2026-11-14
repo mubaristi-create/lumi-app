@@ -24,12 +24,12 @@ window.EyoCoinBonus={
   busy=true;paint();
   try{
    const ad=await LumiAds.rewardedAsync({placement:'eyo_coins'});if(!ad.verified)return {rewarded:false,pending:!!ad.pending};const result=ad.receipt;pendingClaim=null;
-   await P.refresh(true);await EyoCloud.refresh();sync();
+   await P.refresh(true);await EyoCloud.refresh();LumiAds.ackReward({placement:'eyo_coins'},result.id);sync();
    return {rewarded:true,coins:result.coins};
   }finally{busy=false;paint();}
  }
 };
-window.addEventListener('lumi:platform',sync);
+window.addEventListener('lumi:platform',sync);window.addEventListener('lumi:reward-verified',async e=>{if(e.detail.placement==='eyo_coins'){await P.refresh(true);await EyoCloud.refresh();LumiAds.ackReward({placement:'eyo_coins'},e.detail.receipt.id);sync()}});
 window.addEventListener('eyo:cloud',paint);
 P?.ready?.then(sync);setInterval(paint,1000);
 })();
