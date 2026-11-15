@@ -1,0 +1,1082 @@
+[
+  {
+    "world": 1,
+    "index": 0,
+    "id": "w1-0",
+    "key": "mdiFlower"
+  },
+  {
+    "world": 1,
+    "index": 1,
+    "id": "w1-1",
+    "key": "mdiClover"
+  },
+  {
+    "world": 1,
+    "index": 2,
+    "id": "w1-2",
+    "key": "mdiButterfly"
+  },
+  {
+    "world": 1,
+    "index": 3,
+    "id": "w1-3",
+    "key": "mdiLamps"
+  },
+  {
+    "world": 1,
+    "index": 4,
+    "id": "w1-4",
+    "key": "mdiGift"
+  },
+  {
+    "world": 1,
+    "index": 5,
+    "id": "w1-5",
+    "key": "mdiPineTree"
+  },
+  {
+    "world": 1,
+    "index": 6,
+    "id": "w1-6",
+    "key": "mdiFlowerTulip"
+  },
+  {
+    "world": 1,
+    "index": 7,
+    "id": "w1-7",
+    "key": "mdiWaves"
+  },
+  {
+    "world": 1,
+    "index": 8,
+    "id": "w1-8",
+    "key": "mdiFlowerPollen"
+  },
+  {
+    "world": 1,
+    "index": 9,
+    "id": "w1-9",
+    "key": "mdiFlowerOutline"
+  },
+  {
+    "world": 1,
+    "index": 10,
+    "id": "w1-10",
+    "key": "mdiLeaf"
+  },
+  {
+    "world": 1,
+    "index": 11,
+    "id": "w1-11",
+    "key": "mdiFruitGrapes"
+  },
+  {
+    "world": 1,
+    "index": 12,
+    "id": "w1-12",
+    "key": "mdiFruitCherries"
+  },
+  {
+    "world": 1,
+    "index": 13,
+    "id": "w1-13",
+    "key": "mdiWater"
+  },
+  {
+    "world": 1,
+    "index": 14,
+    "id": "w1-14",
+    "key": "mdiSnowflake"
+  },
+  {
+    "world": 1,
+    "index": 15,
+    "id": "w1-15",
+    "key": "mdiFire"
+  },
+  {
+    "world": 1,
+    "index": 16,
+    "id": "w1-16",
+    "key": "mdiMoonWaningCrescent"
+  },
+  {
+    "world": 1,
+    "index": 17,
+    "id": "w1-17",
+    "key": "mdiStar"
+  },
+  {
+    "world": 2,
+    "index": 0,
+    "id": "w2-0",
+    "key": "mdiFish"
+  },
+  {
+    "world": 2,
+    "index": 1,
+    "id": "w2-1",
+    "key": "mdiCircle"
+  },
+  {
+    "world": 2,
+    "index": 2,
+    "id": "w2-2",
+    "key": "mdiDolphin"
+  },
+  {
+    "world": 2,
+    "index": 3,
+    "id": "w2-3",
+    "key": "mdiFishbowl"
+  },
+  {
+    "world": 2,
+    "index": 4,
+    "id": "w2-4",
+    "key": "mdiJellyfish"
+  },
+  {
+    "world": 2,
+    "index": 5,
+    "id": "w2-5",
+    "key": "mdiCircleBox"
+  },
+  {
+    "world": 2,
+    "index": 6,
+    "id": "w2-6",
+    "key": "mdiShark"
+  },
+  {
+    "world": 2,
+    "index": 7,
+    "id": "w2-7",
+    "key": "mdiSailBoat"
+  },
+  {
+    "world": 2,
+    "index": 8,
+    "id": "w2-8",
+    "key": "mdiAnchor"
+  },
+  {
+    "world": 2,
+    "index": 9,
+    "id": "w2-9",
+    "key": "mdiFerry"
+  },
+  {
+    "world": 2,
+    "index": 10,
+    "id": "w2-10",
+    "key": "mdiLifebuoy"
+  },
+  {
+    "world": 2,
+    "index": 11,
+    "id": "w2-11",
+    "key": "mdiDivingScuba"
+  },
+  {
+    "world": 2,
+    "index": 12,
+    "id": "w2-12",
+    "key": "mdiWaves"
+  },
+  {
+    "world": 2,
+    "index": 13,
+    "id": "w2-13",
+    "key": "mdiWater"
+  },
+  {
+    "world": 2,
+    "index": 14,
+    "id": "w2-14",
+    "key": "mdiTurtle"
+  },
+  {
+    "world": 2,
+    "index": 15,
+    "id": "w2-15",
+    "key": "mdiCircleBoxOutline"
+  },
+  {
+    "world": 2,
+    "index": 16,
+    "id": "w2-16",
+    "key": "mdiBeach"
+  },
+  {
+    "world": 2,
+    "index": 17,
+    "id": "w2-17",
+    "key": "mdiStar"
+  },
+  {
+    "world": 3,
+    "index": 0,
+    "id": "w3-0",
+    "key": "mdiCandy"
+  },
+  {
+    "world": 3,
+    "index": 1,
+    "id": "w3-1",
+    "key": "mdiCandycane"
+  },
+  {
+    "world": 3,
+    "index": 2,
+    "id": "w3-2",
+    "key": "mdiCupcake"
+  },
+  {
+    "world": 3,
+    "index": 3,
+    "id": "w3-3",
+    "key": "mdiCookie"
+  },
+  {
+    "world": 3,
+    "index": 4,
+    "id": "w3-4",
+    "key": "mdiCake"
+  },
+  {
+    "world": 3,
+    "index": 5,
+    "id": "w3-5",
+    "key": "mdiIceCream"
+  },
+  {
+    "world": 3,
+    "index": 6,
+    "id": "w3-6",
+    "key": "mdiFoodCroissant"
+  },
+  {
+    "world": 3,
+    "index": 7,
+    "id": "w3-7",
+    "key": "mdiFoodApple"
+  },
+  {
+    "world": 3,
+    "index": 8,
+    "id": "w3-8",
+    "key": "mdiFoodVariant"
+  },
+  {
+    "world": 3,
+    "index": 9,
+    "id": "w3-9",
+    "key": "mdiCoffee"
+  },
+  {
+    "world": 3,
+    "index": 10,
+    "id": "w3-10",
+    "key": "mdiTea"
+  },
+  {
+    "world": 3,
+    "index": 11,
+    "id": "w3-11",
+    "key": "mdiMuffin"
+  },
+  {
+    "world": 3,
+    "index": 12,
+    "id": "w3-12",
+    "key": "mdiPretzel"
+  },
+  {
+    "world": 3,
+    "index": 13,
+    "id": "w3-13",
+    "key": "mdiIcePop"
+  },
+  {
+    "world": 3,
+    "index": 14,
+    "id": "w3-14",
+    "key": "mdiPeanut"
+  },
+  {
+    "world": 3,
+    "index": 15,
+    "id": "w3-15",
+    "key": "mdiPopcorn"
+  },
+  {
+    "world": 3,
+    "index": 16,
+    "id": "w3-16",
+    "key": "mdiFruitPineapple"
+  },
+  {
+    "world": 3,
+    "index": 17,
+    "id": "w3-17",
+    "key": "mdiBowlMix"
+  },
+  {
+    "world": 4,
+    "index": 0,
+    "id": "w4-0",
+    "key": "mdiMoonWaningCrescent"
+  },
+  {
+    "world": 4,
+    "index": 1,
+    "id": "w4-1",
+    "key": "mdiStar"
+  },
+  {
+    "world": 4,
+    "index": 2,
+    "id": "w4-2",
+    "key": "mdiEarth"
+  },
+  {
+    "world": 4,
+    "index": 3,
+    "id": "w4-3",
+    "key": "mdiRocket"
+  },
+  {
+    "world": 4,
+    "index": 4,
+    "id": "w4-4",
+    "key": "mdiUfo"
+  },
+  {
+    "world": 4,
+    "index": 5,
+    "id": "w4-5",
+    "key": "mdiSatellite"
+  },
+  {
+    "world": 4,
+    "index": 6,
+    "id": "w4-6",
+    "key": "mdiTelescope"
+  },
+  {
+    "world": 4,
+    "index": 7,
+    "id": "w4-7",
+    "key": "mdiOrbit"
+  },
+  {
+    "world": 4,
+    "index": 8,
+    "id": "w4-8",
+    "key": "mdiWeatherSunny"
+  },
+  {
+    "world": 4,
+    "index": 9,
+    "id": "w4-9",
+    "key": "mdiWeatherNight"
+  },
+  {
+    "world": 4,
+    "index": 10,
+    "id": "w4-10",
+    "key": "mdiCircle"
+  },
+  {
+    "world": 4,
+    "index": 11,
+    "id": "w4-11",
+    "key": "mdiSpaceStation"
+  },
+  {
+    "world": 4,
+    "index": 12,
+    "id": "w4-12",
+    "key": "mdiStarShooting"
+  },
+  {
+    "world": 4,
+    "index": 13,
+    "id": "w4-13",
+    "key": "mdiMeteor"
+  },
+  {
+    "world": 4,
+    "index": 14,
+    "id": "w4-14",
+    "key": "mdiAlien"
+  },
+  {
+    "world": 4,
+    "index": 15,
+    "id": "w4-15",
+    "key": "mdiWeatherCloudy"
+  },
+  {
+    "world": 4,
+    "index": 16,
+    "id": "w4-16",
+    "key": "mdiStarFourPoints"
+  },
+  {
+    "world": 4,
+    "index": 17,
+    "id": "w4-17",
+    "key": "mdiCompass"
+  },
+  {
+    "world": 5,
+    "index": 0,
+    "id": "w5-0",
+    "key": "mdiDiamondStone"
+  },
+  {
+    "world": 5,
+    "index": 1,
+    "id": "w5-1",
+    "key": "mdiCrystalBall"
+  },
+  {
+    "world": 5,
+    "index": 2,
+    "id": "w5-2",
+    "key": "mdiKey"
+  },
+  {
+    "world": 5,
+    "index": 3,
+    "id": "w5-3",
+    "key": "mdiCrown"
+  },
+  {
+    "world": 5,
+    "index": 4,
+    "id": "w5-4",
+    "key": "mdiCastle"
+  },
+  {
+    "world": 5,
+    "index": 5,
+    "id": "w5-5",
+    "key": "mdiShield"
+  },
+  {
+    "world": 5,
+    "index": 6,
+    "id": "w5-6",
+    "key": "mdiSword"
+  },
+  {
+    "world": 5,
+    "index": 7,
+    "id": "w5-7",
+    "key": "mdiNecklace"
+  },
+  {
+    "world": 5,
+    "index": 8,
+    "id": "w5-8",
+    "key": "mdiEye"
+  },
+  {
+    "world": 5,
+    "index": 9,
+    "id": "w5-9",
+    "key": "mdiCandle"
+  },
+  {
+    "world": 5,
+    "index": 10,
+    "id": "w5-10",
+    "key": "mdiTrophy"
+  },
+  {
+    "world": 5,
+    "index": 11,
+    "id": "w5-11",
+    "key": "mdiRing"
+  },
+  {
+    "world": 5,
+    "index": 12,
+    "id": "w5-12",
+    "key": "mdiGift"
+  },
+  {
+    "world": 5,
+    "index": 13,
+    "id": "w5-13",
+    "key": "mdiCircle"
+  },
+  {
+    "world": 5,
+    "index": 14,
+    "id": "w5-14",
+    "key": "mdiScriptText"
+  },
+  {
+    "world": 5,
+    "index": 15,
+    "id": "w5-15",
+    "key": "mdiZodiacGemini"
+  },
+  {
+    "world": 5,
+    "index": 16,
+    "id": "w5-16",
+    "key": "mdiTreasureChest"
+  },
+  {
+    "world": 5,
+    "index": 17,
+    "id": "w5-17",
+    "key": "mdiLock"
+  },
+  {
+    "world": 6,
+    "index": 0,
+    "id": "w6-0",
+    "key": "mdiFoodApple"
+  },
+  {
+    "world": 6,
+    "index": 1,
+    "id": "w6-1",
+    "key": "mdiFruitCitrus"
+  },
+  {
+    "world": 6,
+    "index": 2,
+    "id": "w6-2",
+    "key": "mdiFruitGrapes"
+  },
+  {
+    "world": 6,
+    "index": 3,
+    "id": "w6-3",
+    "key": "mdiFruitCherries"
+  },
+  {
+    "world": 6,
+    "index": 4,
+    "id": "w6-4",
+    "key": "mdiFruitPineapple"
+  },
+  {
+    "world": 6,
+    "index": 5,
+    "id": "w6-5",
+    "key": "mdiFruitWatermelon"
+  },
+  {
+    "world": 6,
+    "index": 6,
+    "id": "w6-6",
+    "key": "mdiFruitPear"
+  },
+  {
+    "world": 6,
+    "index": 7,
+    "id": "w6-7",
+    "key": "mdiCircle"
+  },
+  {
+    "world": 6,
+    "index": 8,
+    "id": "w6-8",
+    "key": "mdiCircleBox"
+  },
+  {
+    "world": 6,
+    "index": 9,
+    "id": "w6-9",
+    "key": "mdiFruitGrapesOutline"
+  },
+  {
+    "world": 6,
+    "index": 10,
+    "id": "w6-10",
+    "key": "mdiFruitCitrusOff"
+  },
+  {
+    "world": 6,
+    "index": 11,
+    "id": "w6-11",
+    "key": "mdiCarrot"
+  },
+  {
+    "world": 6,
+    "index": 12,
+    "id": "w6-12",
+    "key": "mdiCorn"
+  },
+  {
+    "world": 6,
+    "index": 13,
+    "id": "w6-13",
+    "key": "mdiMushroom"
+  },
+  {
+    "world": 6,
+    "index": 14,
+    "id": "w6-14",
+    "key": "mdiChiliMild"
+  },
+  {
+    "world": 6,
+    "index": 15,
+    "id": "w6-15",
+    "key": "mdiLeaf"
+  },
+  {
+    "world": 6,
+    "index": 16,
+    "id": "w6-16",
+    "key": "mdiTree"
+  },
+  {
+    "world": 6,
+    "index": 17,
+    "id": "w6-17",
+    "key": "mdiSeed"
+  },
+  {
+    "world": 7,
+    "index": 0,
+    "id": "w7-0",
+    "key": "mdiDogSide"
+  },
+  {
+    "world": 7,
+    "index": 1,
+    "id": "w7-1",
+    "key": "mdiPanda"
+  },
+  {
+    "world": 7,
+    "index": 2,
+    "id": "w7-2",
+    "key": "mdiCat"
+  },
+  {
+    "world": 7,
+    "index": 3,
+    "id": "w7-3",
+    "key": "mdiDog"
+  },
+  {
+    "world": 7,
+    "index": 4,
+    "id": "w7-4",
+    "key": "mdiOwl"
+  },
+  {
+    "world": 7,
+    "index": 5,
+    "id": "w7-5",
+    "key": "mdiRabbit"
+  },
+  {
+    "world": 7,
+    "index": 6,
+    "id": "w7-6",
+    "key": "mdiTurtle"
+  },
+  {
+    "world": 7,
+    "index": 7,
+    "id": "w7-7",
+    "key": "mdiBird"
+  },
+  {
+    "world": 7,
+    "index": 8,
+    "id": "w7-8",
+    "key": "mdiButterfly"
+  },
+  {
+    "world": 7,
+    "index": 9,
+    "id": "w7-9",
+    "key": "mdiLadybug"
+  },
+  {
+    "world": 7,
+    "index": 10,
+    "id": "w7-10",
+    "key": "mdiElephant"
+  },
+  {
+    "world": 7,
+    "index": 11,
+    "id": "w7-11",
+    "key": "mdiHorse"
+  },
+  {
+    "world": 7,
+    "index": 12,
+    "id": "w7-12",
+    "key": "mdiCow"
+  },
+  {
+    "world": 7,
+    "index": 13,
+    "id": "w7-13",
+    "key": "mdiPig"
+  },
+  {
+    "world": 7,
+    "index": 14,
+    "id": "w7-14",
+    "key": "mdiSnake"
+  },
+  {
+    "world": 7,
+    "index": 15,
+    "id": "w7-15",
+    "key": "mdiSheep"
+  },
+  {
+    "world": 7,
+    "index": 16,
+    "id": "w7-16",
+    "key": "mdiDuck"
+  },
+  {
+    "world": 7,
+    "index": 17,
+    "id": "w7-17",
+    "key": "mdiSnail"
+  },
+  {
+    "world": 8,
+    "index": 0,
+    "id": "w8-0",
+    "key": "mdiRobot"
+  },
+  {
+    "world": 8,
+    "index": 1,
+    "id": "w8-1",
+    "key": "mdiLaptop"
+  },
+  {
+    "world": 8,
+    "index": 2,
+    "id": "w8-2",
+    "key": "mdiGamepadVariant"
+  },
+  {
+    "world": 8,
+    "index": 3,
+    "id": "w8-3",
+    "key": "mdiCog"
+  },
+  {
+    "world": 8,
+    "index": 4,
+    "id": "w8-4",
+    "key": "mdiLightbulb"
+  },
+  {
+    "world": 8,
+    "index": 5,
+    "id": "w8-5",
+    "key": "mdiAntenna"
+  },
+  {
+    "world": 8,
+    "index": 6,
+    "id": "w8-6",
+    "key": "mdiBattery"
+  },
+  {
+    "world": 8,
+    "index": 7,
+    "id": "w8-7",
+    "key": "mdiCellphone"
+  },
+  {
+    "world": 8,
+    "index": 8,
+    "id": "w8-8",
+    "key": "mdiWatch"
+  },
+  {
+    "world": 8,
+    "index": 9,
+    "id": "w8-9",
+    "key": "mdiPrinter"
+  },
+  {
+    "world": 8,
+    "index": 10,
+    "id": "w8-10",
+    "key": "mdiMouse"
+  },
+  {
+    "world": 8,
+    "index": 11,
+    "id": "w8-11",
+    "key": "mdiCamera"
+  },
+  {
+    "world": 8,
+    "index": 12,
+    "id": "w8-12",
+    "key": "mdiHeadphones"
+  },
+  {
+    "world": 8,
+    "index": 13,
+    "id": "w8-13",
+    "key": "mdiPowerPlug"
+  },
+  {
+    "world": 8,
+    "index": 14,
+    "id": "w8-14",
+    "key": "mdiContentSave"
+  },
+  {
+    "world": 8,
+    "index": 15,
+    "id": "w8-15",
+    "key": "mdiMicroscope"
+  },
+  {
+    "world": 8,
+    "index": 16,
+    "id": "w8-16",
+    "key": "mdiMagnet"
+  },
+  {
+    "world": 8,
+    "index": 17,
+    "id": "w8-17",
+    "key": "mdiTools"
+  },
+  {
+    "world": 9,
+    "index": 0,
+    "id": "w9-0",
+    "key": "mdiCircle"
+  },
+  {
+    "world": 9,
+    "index": 1,
+    "id": "w9-1",
+    "key": "mdiScriptText"
+  },
+  {
+    "world": 9,
+    "index": 2,
+    "id": "w9-2",
+    "key": "mdiBank"
+  },
+  {
+    "world": 9,
+    "index": 3,
+    "id": "w9-3",
+    "key": "mdiCompass"
+  },
+  {
+    "world": 9,
+    "index": 4,
+    "id": "w9-4",
+    "key": "mdiPillar"
+  },
+  {
+    "world": 9,
+    "index": 5,
+    "id": "w9-5",
+    "key": "mdiCurrencyUsd"
+  },
+  {
+    "world": 9,
+    "index": 6,
+    "id": "w9-6",
+    "key": "mdiChessRook"
+  },
+  {
+    "world": 9,
+    "index": 7,
+    "id": "w9-7",
+    "key": "mdiGate"
+  },
+  {
+    "world": 9,
+    "index": 8,
+    "id": "w9-8",
+    "key": "mdiCastle"
+  },
+  {
+    "world": 9,
+    "index": 9,
+    "id": "w9-9",
+    "key": "mdiCandle"
+  },
+  {
+    "world": 9,
+    "index": 10,
+    "id": "w9-10",
+    "key": "mdiScaleBalance"
+  },
+  {
+    "world": 9,
+    "index": 11,
+    "id": "w9-11",
+    "key": "mdiKey"
+  },
+  {
+    "world": 9,
+    "index": 12,
+    "id": "w9-12",
+    "key": "mdiShield"
+  },
+  {
+    "world": 9,
+    "index": 13,
+    "id": "w9-13",
+    "key": "mdiSword"
+  },
+  {
+    "world": 9,
+    "index": 14,
+    "id": "w9-14",
+    "key": "mdiCrown"
+  },
+  {
+    "world": 9,
+    "index": 15,
+    "id": "w9-15",
+    "key": "mdiNecklace"
+  },
+  {
+    "world": 9,
+    "index": 16,
+    "id": "w9-16",
+    "key": "mdiCircleBox"
+  },
+  {
+    "world": 9,
+    "index": 17,
+    "id": "w9-17",
+    "key": "mdiMap"
+  },
+  {
+    "world": 10,
+    "index": 0,
+    "id": "w10-0",
+    "key": "mdiFire"
+  },
+  {
+    "world": 10,
+    "index": 1,
+    "id": "w10-1",
+    "key": "mdiUnicorn"
+  },
+  {
+    "world": 10,
+    "index": 2,
+    "id": "w10-2",
+    "key": "mdiMushroom"
+  },
+  {
+    "world": 10,
+    "index": 3,
+    "id": "w10-3",
+    "key": "mdiCastle"
+  },
+  {
+    "world": 10,
+    "index": 4,
+    "id": "w10-4",
+    "key": "mdiCrystalBall"
+  },
+  {
+    "world": 10,
+    "index": 5,
+    "id": "w10-5",
+    "key": "mdiMagicStaff"
+  },
+  {
+    "world": 10,
+    "index": 6,
+    "id": "w10-6",
+    "key": "mdiWizardHat"
+  },
+  {
+    "world": 10,
+    "index": 7,
+    "id": "w10-7",
+    "key": "mdiFeather"
+  },
+  {
+    "world": 10,
+    "index": 8,
+    "id": "w10-8",
+    "key": "mdiCircle"
+  },
+  {
+    "world": 10,
+    "index": 9,
+    "id": "w10-9",
+    "key": "mdiDiamondStone"
+  },
+  {
+    "world": 10,
+    "index": 10,
+    "id": "w10-10",
+    "key": "mdiFlowerTulip"
+  },
+  {
+    "world": 10,
+    "index": 11,
+    "id": "w10-11",
+    "key": "mdiBird"
+  },
+  {
+    "world": 10,
+    "index": 12,
+    "id": "w10-12",
+    "key": "mdiOwl"
+  },
+  {
+    "world": 10,
+    "index": 13,
+    "id": "w10-13",
+    "key": "mdiStar"
+  },
+  {
+    "world": 10,
+    "index": 14,
+    "id": "w10-14",
+    "key": "mdiMoonWaningCrescent"
+  },
+  {
+    "world": 10,
+    "index": 15,
+    "id": "w10-15",
+    "key": "mdiButterfly"
+  },
+  {
+    "world": 10,
+    "index": 16,
+    "id": "w10-16",
+    "key": "mdiCrown"
+  },
+  {
+    "world": 10,
+    "index": 17,
+    "id": "w10-17",
+    "key": "mdiStarFourPoints"
+  }
+]
