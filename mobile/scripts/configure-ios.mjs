@@ -8,7 +8,7 @@ const app=path.join(mobile,'ios/App/App'),projectFile=path.join(mobile,'ios/App/
 const project=xcode.project(projectFile);project.parseSync();
 const objects=project.hash.project.objects;
 const group=project.findPBXGroupKey({path:'App'});
-for(const name of ['LumiBridgeViewController.swift','LumiAuthStoragePlugin.swift','LumiGameStoragePlugin.swift','LumiAdsPlugin.swift']){
+for(const name of ['LumiBridgeViewController.swift','LumiAuthStoragePlugin.swift','LumiGameStoragePlugin.swift','LumiAdsPlugin.swift','LumiAppleAuthPlugin.swift']){
  if(!project.hasFile(name))project.addSourceFile(name,{},group);
 }
 if(!project.hasFile('PrivacyInfo.xcprivacy')){const file=project.addFile('PrivacyInfo.xcprivacy',group,{lastKnownFileType:'text.xml'});file.uuid=project.generateUuid();project.addToPbxBuildFileSection(file);project.addToPbxResourcesBuildPhase(file);}
@@ -41,12 +41,15 @@ for(const [id,config] of Object.entries(objects.XCBuildConfiguration)){
   settings.OTHER_LDFLAGS='"$(inherited) -ObjC"';
  }
 }
+// xcode's addSourceFile may leave undefined optional fields; never serialize them into the project.
+for(const section of Object.values(objects))if(section&&typeof section==='object')for(const obj of Object.values(section))if(obj&&typeof obj==='object')for(const [key,value] of Object.entries(obj))if(value===undefined||value==='undefined')delete obj[key];
 fs.writeFileSync(projectFile,project.writeSync());
 const file=path.join(app,'Info.plist'),info=plist.parse(fs.readFileSync(file,'utf8'));
 info.CFBundleDisplayName='Lumi';
 info.CFBundleURLTypes=[{CFBundleURLName:'Lumi Auth',CFBundleURLSchemes:['com.lumi.play']}];
 info.GADApplicationIdentifier='ca-app-pub-3940256099942544~1458002511';
 info.LumiTestAds=true;
+info.LumiAppleSignInEnabled=false;
 // Test-only initial integration. Production IDs + server allowlist need explicit setup.
 info.SKAdNetworkItems=[{SKAdNetworkIdentifier:'cstr6suwn9.skadnetwork'}];
 fs.writeFileSync(file,plist.build(info));

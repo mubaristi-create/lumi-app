@@ -23,6 +23,7 @@
 		E4ECDC168E734BB9A53881E5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 56996AC8DA9C4A3CB8808BB2 /* PrivacyInfo.xcprivacy */; };
 		A62919041DC047C286FF30C9 = {isa = PBXBuildFile; productRef = 155E8E678AD94E288E494909; };
 		81DCBD10E31D49A4B56F1C02 = {isa = PBXBuildFile; productRef = 3D67552B9D0C475693306751; };
+		35C2EF95EFFB4BBE99613766 /* LumiAppleAuthPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09CCA5F42622455EB51822C7 /* LumiAppleAuthPlugin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,11 +38,12 @@
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		9582B6822FE993A50072D4E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		958DCC722DB07C7200EA8C5F /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = debug.xcconfig; path = ../debug.xcconfig; sourceTree = SOURCE_ROOT; };
-		A4EF940B74A6446B92E37DDE /* LumiBridgeViewController.swift */ = {isa = PBXFileReference; name = "LumiBridgeViewController.swift"; path = "LumiBridgeViewController.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		19D80DAB25524A4385E32C0B /* LumiAuthStoragePlugin.swift */ = {isa = PBXFileReference; name = "LumiAuthStoragePlugin.swift"; path = "LumiAuthStoragePlugin.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		E9152F15FF474F6FB09CE24E /* LumiGameStoragePlugin.swift */ = {isa = PBXFileReference; name = "LumiGameStoragePlugin.swift"; path = "LumiGameStoragePlugin.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		E9D73DBCBD0C41B38BBCBEE3 /* LumiAdsPlugin.swift */ = {isa = PBXFileReference; name = "LumiAdsPlugin.swift"; path = "LumiAdsPlugin.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		56996AC8DA9C4A3CB8808BB2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; name = "PrivacyInfo.xcprivacy"; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = text.xml; explicitFileType = undefined; includeInIndex = 0; };
+		A4EF940B74A6446B92E37DDE /* LumiBridgeViewController.swift */ = {isa = PBXFileReference; name = "LumiBridgeViewController.swift"; path = "LumiBridgeViewController.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; includeInIndex = 0; };
+		19D80DAB25524A4385E32C0B /* LumiAuthStoragePlugin.swift */ = {isa = PBXFileReference; name = "LumiAuthStoragePlugin.swift"; path = "LumiAuthStoragePlugin.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; includeInIndex = 0; };
+		E9152F15FF474F6FB09CE24E /* LumiGameStoragePlugin.swift */ = {isa = PBXFileReference; name = "LumiGameStoragePlugin.swift"; path = "LumiGameStoragePlugin.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; includeInIndex = 0; };
+		E9D73DBCBD0C41B38BBCBEE3 /* LumiAdsPlugin.swift */ = {isa = PBXFileReference; name = "LumiAdsPlugin.swift"; path = "LumiAdsPlugin.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; includeInIndex = 0; };
+		56996AC8DA9C4A3CB8808BB2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; name = "PrivacyInfo.xcprivacy"; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; lastKnownFileType = text.xml; includeInIndex = 0; };
+		09CCA5F42622455EB51822C7 /* LumiAppleAuthPlugin.swift */ = {isa = PBXFileReference; name = "LumiAppleAuthPlugin.swift"; path = "LumiAppleAuthPlugin.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 				E9152F15FF474F6FB09CE24E /* LumiGameStoragePlugin.swift */,
 				E9D73DBCBD0C41B38BBCBEE3 /* LumiAdsPlugin.swift */,
 				56996AC8DA9C4A3CB8808BB2 /* PrivacyInfo.xcprivacy */,
+				09CCA5F42622455EB51822C7 /* LumiAppleAuthPlugin.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -188,6 +191,7 @@
 				5BF7C69C618F451A99037F36 /* LumiAuthStoragePlugin.swift in Sources */,
 				0FD60CF869B948AEB648EF94 /* LumiGameStoragePlugin.swift in Sources */,
 				E38EBD030C954D75A95E9FF3 /* LumiAdsPlugin.swift in Sources */,
+				35C2EF95EFFB4BBE99613766 /* LumiAppleAuthPlugin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

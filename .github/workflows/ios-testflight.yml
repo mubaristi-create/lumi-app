@@ -22,6 +22,7 @@ jobs:
       IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID }}
       IOS_BUILD_NUMBER: ${{ inputs.build_number }}
       IOS_AD_MODE: test
+      IOS_APPLE_SIGN_IN: ${{ vars.IOS_APPLE_SIGN_IN || 'false' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

@@ -5,10 +5,16 @@ cd "$(dirname "$0")/.."
 : "${IOS_TEAM_ID:?Apple team ID required}"
 : "${IOS_BUNDLE_ID:?Registered Apple bundle ID required}"
 : "${IOS_BUILD_NUMBER:?Unique numeric build number required}"
+: "${IOS_PROFILE_NAME:?App Store distribution profile name required}"
 [[ "$IOS_TEAM_ID" =~ ^[A-Z0-9]{10}$ && "$IOS_BUILD_NUMBER" =~ ^[1-9][0-9]*$ ]] || exit 1
 [[ "$IOS_BUNDLE_ID" =~ ^[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+$ ]] || exit 1
 node scripts/prepare-ios.mjs
 mkdir -p build/artifacts
+entitlements=()
+if [[ "${IOS_APPLE_SIGN_IN:-false}" == true ]]; then
+  /usr/libexec/PlistBuddy -c 'Set :LumiAppleSignInEnabled true' ios/App/App/Info.plist
+  entitlements=(CODE_SIGN_ENTITLEMENTS=App/App.entitlements)
+fi
 if [[ "${IOS_AD_MODE:-test}" == production ]]; then
   : "${IOS_ADMOB_APP_ID:?iOS AdMob app ID required}"
   : "${IOS_BANNER_UNIT:?iOS banner unit required}"
@@ -31,7 +37,7 @@ xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
   -clonedSourcePackagesDirPath build/SourcePackages \
   DEVELOPMENT_TEAM="$IOS_TEAM_ID" PRODUCT_BUNDLE_IDENTIFIER="$IOS_BUNDLE_ID" \
   CURRENT_PROJECT_VERSION="$IOS_BUILD_NUMBER" CODE_SIGN_STYLE=Manual \
-  CODE_SIGN_IDENTITY='Apple Distribution' PROVISIONING_PROFILE_SPECIFIER="$IOS_PROFILE_NAME" archive
+  CODE_SIGN_IDENTITY='Apple Distribution' PROVISIONING_PROFILE_SPECIFIER="$IOS_PROFILE_NAME" "${entitlements[@]}" archive
 export IOS_TEAM_ID IOS_BUNDLE_ID IOS_PROFILE_NAME
 python3 - <<'PY'
 import os, plistlib

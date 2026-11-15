@@ -9,6 +9,7 @@ class LumiBridgeViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(LumiAuthStoragePlugin())
         bridge?.registerPluginInstance(LumiGameStoragePlugin())
         bridge?.registerPluginInstance(LumiAdsPlugin())
+        bridge?.registerPluginInstance(LumiAppleAuthPlugin())
     }
     override func viewDidLoad() {
         super.viewDidLoad()

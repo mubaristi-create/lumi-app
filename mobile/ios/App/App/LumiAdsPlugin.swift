@@ -18,6 +18,7 @@ public class LumiAdsPlugin: CAPPlugin, CAPBridgedPlugin, BannerViewDelegate, Ful
     private var interLoading = false, rewardLoading = false
     private var interAt = Date.distantPast, rewardAt = Date.distantPast
     private var pending: CAPPluginCall?, earned = false, shown = false, format = ""
+    private var presentingAd: FullScreenPresentingAd?
     private var events: [JSObject] = [], counts: [String: Int] = [:]
     private var bannerRetry: DispatchWorkItem?
     private var retryAttempt = 0
@@ -148,7 +149,7 @@ public class LumiAdsPlugin: CAPPlugin, CAPBridgedPlugin, BannerViewDelegate, Ful
                   Date().timeIntervalSince(self.interAt) < 3500, let host = self.bridge?.viewController,
                   host.presentedViewController == nil else { self.result(call, "not_ready"); self.loadFullScreen(); return }
             self.pending = call; self.earned = false; self.shown = false; self.format = "interstitial"
-            self.interstitial = nil; ad.present(from: host)
+            self.presentingAd = ad; self.interstitial = nil; ad.present(from: host)
         }
     }
     @objc func showRewarded(_ call: CAPPluginCall) {
@@ -164,7 +165,7 @@ public class LumiAdsPlugin: CAPPlugin, CAPBridgedPlugin, BannerViewDelegate, Ful
             options.userIdentifier = user; options.customRewardText = request
             ad.serverSideVerificationOptions = options
             self.pending = call; self.earned = false; self.shown = false; self.format = "rewarded"
-            self.rewarded = nil
+            self.presentingAd = ad; self.rewarded = nil
             ad.present(from: host) { self.earned = true; self.event("rewarded", "sdk_reward_pending_ssv") }
         }
     }
@@ -175,7 +176,7 @@ public class LumiAdsPlugin: CAPPlugin, CAPBridgedPlugin, BannerViewDelegate, Ful
         event(format, "present_failed", error); finishAd("present_failed")
     }
     private func finishAd(_ status: String) {
-        guard let call = pending else { return }; pending = nil
+        guard let call = pending else { return }; pending = nil; presentingAd = nil
         result(call, status, shown: shown, earned: earned); loadFullScreen()
     }
     @objc func diagnostics(_ call: CAPPluginCall) {
