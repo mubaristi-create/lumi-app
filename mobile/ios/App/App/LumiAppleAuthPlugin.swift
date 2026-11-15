@@ -10,7 +10,7 @@ public class LumiAppleAuthPlugin: CAPPlugin, CAPBridgedPlugin,
     ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     public let identifier = "LumiAppleAuthPlugin"
     public let jsName = "LumiAppleAuth"
-    public let pluginMethods = [CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
+    public let pluginMethods: [CAPPluginMethod] = [CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
                                 CAPPluginMethod(name: "isAvailable", returnType: CAPPluginReturnPromise)]
     private var pending: CAPPluginCall?
     private var nonce: String?
