@@ -35,7 +35,25 @@ jobs:
           xcrun simctl launch "$device" az.playlumio.app
           sleep 8
           xcrun simctl io "$device" screenshot mobile/build/artifacts/Lumi-iOS-launch.png
+          xcrun simctl terminate "$device" az.playlumio.app
+          xcrun simctl launch "$device" az.playlumio.app --lumi-smoke
+          container=$(xcrun simctl get_app_container "$device" az.playlumio.app data)
+          for n in {1..90}; do
+            [[ -f "$container/Documents/lumi-ci/smoke.json" ]] && break
+            sleep 1
+          done
+          cp -R "$container/Documents/lumi-ci" mobile/build/artifacts/
+          python3 -c 'import json; r=json.load(open("mobile/build/artifacts/lumi-ci/smoke.json")); print(r); assert r["ok"]'
+          xcrun simctl terminate "$device" az.playlumio.app
+          xcrun simctl launch "$device" az.playlumio.app --lumi-smoke-resume
+          for n in {1..30}; do
+            [[ -f "$container/Documents/lumi-ci/smoke-resume.json" ]] && break
+            sleep 1
+          done
+          cp "$container/Documents/lumi-ci/smoke-resume.json" mobile/build/artifacts/lumi-ci/
+          python3 -c 'import json; r=json.load(open("mobile/build/artifacts/lumi-ci/smoke-resume.json")); print(r); assert r["ok"]'
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: Lumi-iOS-2.0.8-simulator
           path: mobile/build/artifacts/

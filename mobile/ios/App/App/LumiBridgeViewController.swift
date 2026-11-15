@@ -5,6 +5,13 @@ import Capacitor
 @objc(LumiBridgeViewController)
 class LumiBridgeViewController: CAPBridgeViewController {
     let bannerSlot = UIView()
+    private var smokeStarted = false
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        #if DEBUG
+        if !smokeStarted { smokeStarted = true; runSmokeIfRequested() }
+        #endif
+    }
     override func capacitorDidLoad() {
         bridge?.registerPluginInstance(LumiAuthStoragePlugin())
         bridge?.registerPluginInstance(LumiGameStoragePlugin())

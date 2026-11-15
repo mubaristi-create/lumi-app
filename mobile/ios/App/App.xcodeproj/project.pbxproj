@@ -24,6 +24,7 @@
 		A62919041DC047C286FF30C9 = {isa = PBXBuildFile; productRef = 155E8E678AD94E288E494909; };
 		81DCBD10E31D49A4B56F1C02 = {isa = PBXBuildFile; productRef = 3D67552B9D0C475693306751; };
 		35C2EF95EFFB4BBE99613766 /* LumiAppleAuthPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09CCA5F42622455EB51822C7 /* LumiAppleAuthPlugin.swift */; };
+		25A957853C854C1EB6E5F1FB /* LumiIOSSmoke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A36F53081BD40E3810FEFEF /* LumiIOSSmoke.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		E9D73DBCBD0C41B38BBCBEE3 /* LumiAdsPlugin.swift */ = {isa = PBXFileReference; name = "LumiAdsPlugin.swift"; path = "LumiAdsPlugin.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; includeInIndex = 0; };
 		56996AC8DA9C4A3CB8808BB2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; name = "PrivacyInfo.xcprivacy"; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; lastKnownFileType = text.xml; includeInIndex = 0; };
 		09CCA5F42622455EB51822C7 /* LumiAppleAuthPlugin.swift */ = {isa = PBXFileReference; name = "LumiAppleAuthPlugin.swift"; path = "LumiAppleAuthPlugin.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; includeInIndex = 0; };
+		1A36F53081BD40E3810FEFEF /* LumiIOSSmoke.swift */ = {isa = PBXFileReference; name = "LumiIOSSmoke.swift"; path = "LumiIOSSmoke.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				E9D73DBCBD0C41B38BBCBEE3 /* LumiAdsPlugin.swift */,
 				56996AC8DA9C4A3CB8808BB2 /* PrivacyInfo.xcprivacy */,
 				09CCA5F42622455EB51822C7 /* LumiAppleAuthPlugin.swift */,
+				1A36F53081BD40E3810FEFEF /* LumiIOSSmoke.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 				0FD60CF869B948AEB648EF94 /* LumiGameStoragePlugin.swift in Sources */,
 				E38EBD030C954D75A95E9FF3 /* LumiAdsPlugin.swift in Sources */,
 				35C2EF95EFFB4BBE99613766 /* LumiAppleAuthPlugin.swift in Sources */,
+				25A957853C854C1EB6E5F1FB /* LumiIOSSmoke.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
