@@ -1,0 +1,10 @@
+# Lumi 2.0.7 (24)
+
+- Replace the broad EYO dictionary pack with 2,000 easier connected crosswords drawn from 492 selected everyday Azerbaijani words. Each level has four targets, words of 3–6 letters and a bag of at most eight letters. The owner approved distant repetition; each target/hidden word has at least ten intervening levels before reuse. Optional hidden words remain. All layouts validate. Existing account balances and unlocked/completed levels are retained; starting an updated online level selects its new version.
+- Fix EYO rewarded-coin requests reusing an already-paid receipt after the 15-minute cooldown. Paid EYO receipts no longer replace a fresh ad request. Pending receipt recovery, signed Google SSV, owner checks, server coin credit and idempotency are retained. The direct button displays loading/cooldown state and provides explicit pending or unavailable feedback.
+- Tiles applies the authoritative wallet snapshot and emits the confirmed level reward as soon as tiles_sync returns. Checkpoint storage no longer blocks the reward response. Newer run snapshots coalesce while synchronization is in flight, completed runs are prioritized, and unsaved checkpoints remain in the durable outbox for retry. RPC requests have an eight-second network deadline. No unverified balance is awarded.
+- Bump changed script URLs to prevent stale client versions from hiding the fixes. Keep banner geometry, child-safe ad requests, authentication and existing rewards unchanged.
+
+Validation: 422 server assertions, all 2,000 layouts, common-word membership and repeat-spacing checks, blocked-checkpoint/late-completion wallet test, explicit EYO ad feedback, signed receipt delay, Tiles ads/CSP, banner stability and strict page CSP. Live server seed and private receipt guard verified. Browser fresh-session EYO showed the new easy level. Signed AAB assets and bundletool checked before delivery.
+
+Actual ad availability depends on AdMob fill. No physical-device ad-playback test was completed; no unverified rewards are simulated. Server confirmation still requires a working connection. Play Console upload is separate.

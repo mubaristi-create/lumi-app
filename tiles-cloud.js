@@ -3,27 +3,38 @@
 global.LumiTilesBridge={async create(Game){
  await global.LumiCloud.ready;
  const uid=global.LumiCloud.state.account?.id||'guest',key='lumi-tiles-outbox:'+uid;
- let state=null,queue={},tail=Promise.resolve(),draining=false;
+ let state=null,queue={},tail=Promise.resolve(),draining=false;const checkpoints=new Map();
  try{queue=JSON.parse(localStorage.getItem(key)||'{}')}catch{}
  function actor(){return uid!=='guest'&&global.LumiCloud.state.status==='signedIn'&&global.LumiCloud.state.account?.id===uid}
  function persist(){try{localStorage.setItem(key,JSON.stringify(queue))}catch{}}
- async function rpc(name,args={}){if(!actor())throw Error('Lumi hesabına daxil ol');const r=await global.LumiServer.client.rpc(name,args);if(r.error)throw r.error;return r.data}
+ async function rpc(name,args={}){if(!actor())throw Error('Lumi hesabına daxil ol');const controller=global.AbortController?new global.AbortController():null,timer=controller?global.setTimeout(()=>controller.abort(),8000):null;try{let request=global.LumiServer.client.rpc(name,args);if(controller&&request.abortSignal)request=request.abortSignal(controller.signal);const r=await request;if(r.error)throw r.error;return r.data}finally{if(timer)global.clearTimeout(timer)}}
  async function refresh(){state=await rpc('tiles_state');return state}
  function events(g){const replay=new Game(g.level,g.runId,g.initialHelps);return g.events.map(e=>{let ok=e.type==='match'?replay.match(...e.ids):e.type==='hint'?replay.hint():e.type==='undo'?replay.undo():e.type==='shuffle'?replay.shuffle(e.seed):e.type==='rewarded_help'?replay.grantHelp(e):false;if(!ok)throw Error('Invalid replay');return e.type==='shuffle'?{...e,board:structuredClone(replay.board)}:e})}
+ // Checkpoint storage is independent of the authoritative point transaction.
+ function checkpoint(run,json,g,result){
+  const prior=checkpoints.get(run);if(prior)return;
+  const task=(async()=>{try{await rpc('tiles_checkpoint',{p_run:run,p_checkpoint:JSON.parse(json)});
+   for(const e of g.events.filter(e=>e.type==='rewarded_help'))global.LumiAds?.ackReward?.({placement:'tiles_'+e.help,context:run},e.receiptId);
+   if(result.reward_status!=='daily_limit'&&queue[run]===json){delete queue[run];persist()}
+  }catch(error){global.dispatchEvent(new CustomEvent('lumi:tiles-checkpoint-error',{detail:{runId:run,message:error.message}}))}
+  finally{checkpoints.delete(run);if(queue[run]&&queue[run]!==json)flush().catch(()=>{})}})();checkpoints.set(run,task);
+ }
  async function drain(){
-  if(!actor()||draining)return;draining=true;let failure=null;
-  try{for(const [run,json] of Object.entries(queue)){try{
-   const g=Game.restore(json),result=await rpc('tiles_sync',{p_run:run,p_level:g.level,p_events:events(g)});state=result.state;
-   let checkpointSaved=false;try{await rpc('tiles_checkpoint',{p_run:run,p_checkpoint:JSON.parse(json)});checkpointSaved=true}catch(error){failure=error;global.dispatchEvent(new CustomEvent('lumi:tiles-checkpoint-error',{detail:{runId:run,message:error.message}}))}
-   global.dispatchEvent(new CustomEvent('lumi:tiles-reward',{detail:{...result,runId:run}}));
-   // A response may have been lost after the server committed. A replay credits zero,
-   // but its authoritative balance still has to reach the main Lumi wallet.
-   if(result.credited>0||Number(result.state?.balance)!==Number(global.LumiCloud.state.balance)){
-    await global.LumiCloud.refreshWallet();await global.LumiPlatform?.refresh?.(true);
-   }
-   if(checkpointSaved)for(const e of g.events.filter(e=>e.type==='rewarded_help'))global.LumiAds?.ackReward?.({placement:'tiles_'+e.help,context:run},e.receiptId);
-   if(checkpointSaved&&result.reward_status!=='daily_limit'&&queue[run]===json){delete queue[run];persist()}
-  }catch(error){failure=error;global.dispatchEvent(new CustomEvent('lumi:tiles-sync-pending',{detail:{runId:run}}))}}if(failure)throw failure}finally{draining=false}
+  if(!actor()||draining)return;draining=true;let failure=null;const processed=new Map();
+  try{while(actor()){
+   const items=Object.entries(queue).filter(([run,json])=>processed.get(run)!==json);
+   if(!items.length)break;
+   // A just-completed board is never held behind older pending runs.
+   items.sort((a,b)=>Number(Game.restore(b[1]).phase==='won')-Number(Game.restore(a[1]).phase==='won'));
+   for(const [run,json]of items){processed.set(run,json);try{
+    const g=Game.restore(json),result=await rpc('tiles_sync',{p_run:run,p_level:g.level,p_events:events(g)});state=result.state;
+    if(!actor())return;
+    const applied=global.LumiCloud.applyWalletSnapshot?.(result.state,uid);
+    global.dispatchEvent(new CustomEvent('lumi:tiles-reward',{detail:{...result,runId:run}}));
+    if(!applied&&(result.credited>0||Number(result.state?.balance)!==Number(global.LumiCloud.state.balance)))await global.LumiCloud.refreshWallet();
+    checkpoint(run,json,g,result);
+   }catch(error){failure=error;global.dispatchEvent(new CustomEvent('lumi:tiles-sync-pending',{detail:{runId:run,message:error.message}}))}}
+  }if(failure)throw failure}finally{draining=false}
  }
  function flush(){tail=tail.catch(()=>{}).then(drain);return tail}
  const opportunities=new Map();const rewardedAds=global.LumiNativeAds?{async prepareRewardedHelp({runId,level,help}){if(!['hint','shuffle','undo'].includes(help))return null;await flush();const id=crypto.randomUUID();opportunities.set(id,{runId,level,help});return{opportunityId:id}},async showRewardedAd({opportunityId}){const o=opportunities.get(opportunityId);if(!o)return{completed:false};o.result=await global.LumiAds.rewardedAsync({placement:'tiles_'+o.help,context:o.runId});return{completed:!!o.result.verified}},async claimRewardedHelp({opportunityId}){const o=opportunities.get(opportunityId);return o?.result?.verified?{receiptId:o.result.receipt.id}:null},async verifyRewardedHelp({receiptId}){for(const o of opportunities.values())if(o.result?.receipt?.id===receiptId)return{confirmed:o.result.verified,receiptId,runId:o.runId,level:o.level,help:o.help,quantity:1};return{confirmed:false}}}:null;
