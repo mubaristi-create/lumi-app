@@ -16,6 +16,6 @@ const storage=window.LumiAuthStorage={
  blockWrites(value){blocked=!!value;if(blocked)legacy.setItem('lumi-auth-explicit-logout-v1','1');else legacy.removeItem('lumi-auth-explicit-logout-v1')},
  async snapshot(){try{const raw=await this.getItem(PREFIX);const s=raw?JSON.parse(raw):null;return s?.refresh_token&&s?.user?.id?s:null}catch{return null}},
  async clear(){this.blockWrites(true);await Promise.all([PREFIX,PREFIX+'-code-verifier',PREFIX+'-user'].map(k=>this.removeItem(k)))},
- kind:()=>native()?'android-keystore':'webcrypto-indexeddb'
+ kind:()=>native()?(window.LumiNativePlatform==='ios'?'ios-keychain':'android-keystore'):'webcrypto-indexeddb'
 };
 })();

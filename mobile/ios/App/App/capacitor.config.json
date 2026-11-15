@@ -1,0 +1,36 @@
+{
+  "appId": "az.playlumio.app",
+  "appName": "Lumi",
+  "webDir": "www",
+  "backgroundColor": "#100609",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  },
+  "ios": {
+    "contentInset": "never"
+  },
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": [
+        "alert",
+        "sound",
+        "badge"
+      ]
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#100609",
+      "overlaysWebView": false
+    }
+  },
+  "packageClassList": [
+    "AppPlugin",
+    "CAPBrowserPlugin",
+    "LocalNotificationsPlugin",
+    "StatusBarPlugin",
+    "PushNotificationsPlugin"
+  ]
+}
