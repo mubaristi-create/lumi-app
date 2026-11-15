@@ -67,7 +67,7 @@ extension LumiBridgeViewController {
     }
     @MainActor private func smokeJS(_ body: String) async throws -> Any {
         guard let web = webView else { throw smokeError("Missing WebView") }
-        return try await web.callAsyncJavaScript(body, arguments: [:], in: nil, in: .page)
+        return try await web.callAsyncJavaScript(body, arguments: [:], in: nil, contentWorld: .page) ?? NSNull()
     }
     private func smokeDirectory() throws -> URL {
         let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
