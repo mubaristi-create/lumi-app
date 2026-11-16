@@ -7,7 +7,7 @@ permissions:
   contents: read
 jobs:
   simulator:
-    runs-on: macos-15
+    runs-on: macos-15-intel
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
@@ -69,3 +69,4 @@ jobs:
           name: Lumi-iOS-2.0.8-simulator
           path: mobile/build/artifacts/
           retention-days: 14
+
