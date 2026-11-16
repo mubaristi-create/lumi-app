@@ -45,7 +45,12 @@ extension LumiBridgeViewController {
                             return {rendered:true,width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth};
                             """)
                         if var values = page as? [String: Any] { values["file"] = file; pages.append(values) }
-                        let image = try await web.takeSnapshot(configuration: nil)
+                        let image: UIImage = try await withCheckedThrowingContinuation { continuation in
+                            web.takeSnapshot(with: nil) { image, error in
+                                if let image = image { continuation.resume(returning: image) }
+                                else { continuation.resume(throwing: error ?? self.smokeError("Snapshot unavailable")) }
+                            }
+                        }
                         if let png = image.pngData() { try png.write(to: smokeDirectory().appendingPathComponent(file + ".png"), options: .atomic) }
                     }
                     output["pages"] = pages
@@ -60,14 +65,28 @@ extension LumiBridgeViewController {
     }
     @MainActor private func smokeWait(_ expression: String) async throws {
         for _ in 0..<60 {
-            if let web = webView, let ready = try? await web.evaluateJavaScript(expression) as? Bool, ready { return }
+            if let ready = try? await smokeEvaluate(expression) as? Bool, ready { return }
             try await Task.sleep(nanoseconds: 500_000_000)
         }
         throw smokeError("WebView readiness timeout")
     }
     @MainActor private func smokeJS(_ body: String) async throws -> Any {
         guard let web = webView else { throw smokeError("Missing WebView") }
-        return try await web.callAsyncJavaScript(body, arguments: [:], in: nil, contentWorld: .page) ?? NSNull()
+        // Completion APIs avoid Xcode 26's strong Swift WebKit overlay dependency on older simulators.
+        return try await withCheckedThrowingContinuation { continuation in
+            web.callAsyncJavaScript(body, arguments: [:], in: nil, in: .page) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+    @MainActor private func smokeEvaluate(_ expression: String) async throws -> Any? {
+        guard let web = webView else { throw smokeError("Missing WebView") }
+        return try await withCheckedThrowingContinuation { continuation in
+            web.evaluateJavaScript(expression) { value, error in
+                if let error = error { continuation.resume(throwing: error) }
+                else { continuation.resume(returning: value) }
+            }
+        }
     }
     private func smokeDirectory() throws -> URL {
         let directory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
