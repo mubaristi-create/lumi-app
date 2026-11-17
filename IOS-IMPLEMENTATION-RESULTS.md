@@ -37,4 +37,4 @@ Cloud run: https://github.com/mubaristi-create/lumi-app/actions/runs/44012714230
 
 Təsdiqlənmiş simulator artifact: https://github.com/mubaristi-create/lumi-app/actions/runs/44012714230/artifacts/14297859480
 Artifact SHA256: e52b9e2594f0d3d43d722757fc4f30f4dfb865f3e106ec7efec81e60714ffddb
-Native code revision: 3586a2cea80a718ce6ba054172470499cc814bd6. Sonrakı CI dəyişiklikləri simulator pəncərəsi və screenshot vaxt limiti üçündür.
+Native code revision: 3586a2cea80a718ce6ba054172470499cc814bd6. Yekun workflow həmin təsdiqlənmiş run ilə uyğunlaşdırılıb.
