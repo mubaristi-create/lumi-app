@@ -1,0 +1,46 @@
+name: Upload verified Lumi iOS build
+on:
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: read
+jobs:
+  upload:
+    runs-on: macos-15-intel
+    environment: ios-release
+    timeout-minutes: 25
+    env:
+      APPLE_ID: ${{ vars.APPLE_UPLOAD_ID }}
+      APPLE_UPLOAD_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Lumi-iOS-TestFlight-1
+          path: signed-build
+          github-token: ${{ github.token }}
+          run-id: 44127221716
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.0'
+      - name: Check signed application identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f signed-build/App.ipa
+          unzip -q signed-build/App.ipa -d verify-app
+          app="verify-app/Payload/App.app"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Info.plist")" = az.playlumio.app
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Info.plist")" = 2.0.8
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$app/Info.plist")" = 1
+          codesign --verify --deep --strict "$app"
+          codesign -d --entitlements :- "$app" > entitlements.plist 2>/dev/null
+          test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.developer.team-identifier' entitlements.plist)" = 248HG7USHB
+          shasum -a 256 signed-build/App.ipa
+      - name: Validate and upload to App Store Connect
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${APPLE_ID:?Apple upload ID not configured}"
+          : "${APPLE_UPLOAD_PASSWORD:?App-specific password not configured}"
+          xcrun altool --validate-app --type ios --file signed-build/App.ipa --username "$APPLE_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
+          xcrun altool --upload-app --type ios --file signed-build/App.ipa --username "$APPLE_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
