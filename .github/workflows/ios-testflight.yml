@@ -14,7 +14,7 @@ permissions:
   contents: read
 jobs:
   archive:
-    runs-on: macos-15-intel
+    runs-on: macos-15
     environment: ios-release
     timeout-minutes: 45
     env:
