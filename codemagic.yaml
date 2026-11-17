@@ -1,0 +1,67 @@
+workflows:
+  lumi-ios-release:
+    name: Lumi iOS signed TestFlight release
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    environment:
+      groups:
+        - lumi_ios_release
+      xcode: '26.0'
+      node: '22'
+      vars:
+        IOS_TEAM_ID: 248HG7USHB
+        IOS_BUNDLE_ID: az.playlumio.app
+        IOS_BUILD_NUMBER: '2'
+        IOS_AD_MODE: test
+        IOS_APPLE_SIGN_IN: 'false'
+    scripts:
+      - name: Build verified source, sign and upload
+        script: |
+          set -euo pipefail
+          git fetch origin 15e26664330db5e56f4fbe5ece7022b005c193dd
+          git checkout --detach 15e26664330db5e56f4fbe5ece7022b005c193dd
+          export RUNNER_TEMP="$(mktemp -d)"
+          cleanup() {
+            security delete-keychain "$RUNNER_TEMP/lumi-signing.keychain-db" >/dev/null 2>&1 || true
+            rm -f "$RUNNER_TEMP/ios.p12" "$RUNNER_TEMP/ios.mobileprovision" "$RUNNER_TEMP/profile.plist"
+            if [[ -n "${profile_uuid:-}" ]]; then rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/$profile_uuid.mobileprovision"; fi
+          }
+          trap cleanup EXIT
+          export CERT="$IOS_DISTRIBUTION_P12_BASE64"
+          export CERT_PASSWORD="$IOS_DISTRIBUTION_P12_PASSWORD"
+          export PROFILE="$IOS_PROFILE_BASE64"
+          set -euo pipefail
+          : "${CERT:?Apple Developer signing certificate not configured}"
+          : "${PROFILE:?App Store distribution profile not configured}"
+          cert_path="$RUNNER_TEMP/ios.p12"
+          profile_path="$RUNNER_TEMP/ios.mobileprovision"
+          keychain_path="$RUNNER_TEMP/lumi-signing.keychain-db"
+          keychain_password="$(openssl rand -base64 32)"
+          echo "::add-mask::$keychain_password"
+          printf '%s' "$CERT" | base64 --decode > "$cert_path"
+          printf '%s' "$PROFILE" | base64 --decode > "$profile_path"
+          security create-keychain -p "$keychain_password" "$keychain_path"
+          security set-keychain-settings -lut 21600 "$keychain_path"
+          security unlock-keychain -p "$keychain_password" "$keychain_path"
+          security import "$cert_path" -P "$CERT_PASSWORD" -A -t cert -f pkcs12 -k "$keychain_path"
+          security set-key-partition-list -S apple-tool:,apple: -k "$keychain_password" "$keychain_path" > /dev/null
+          security list-keychain -d user -s "$keychain_path"
+          security cms -D -i "$profile_path" > "$RUNNER_TEMP/profile.plist"
+          profile_uuid=$(/usr/libexec/PlistBuddy -c 'Print :UUID' "$RUNNER_TEMP/profile.plist")
+          profile_name=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$RUNNER_TEMP/profile.plist")
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          cp "$profile_path" "$HOME/Library/MobileDevice/Provisioning Profiles/$profile_uuid.mobileprovision"
+          export IOS_PROFILE_NAME="$profile_name"
+          
+          cd mobile
+          npm ci
+          bash scripts/build-ios-release.sh
+          export APPLE_UPLOAD_PASSWORD="$APPLE_APP_SPECIFIC_PASSWORD"
+          : "${APPLE_UPLOAD_ID:?Apple upload account required}"
+          : "${APPLE_UPLOAD_PASSWORD:?App-specific upload password required}"
+          xcrun altool --validate-app --type ios --file build/artifacts/App.ipa --username "$APPLE_UPLOAD_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
+          xcrun altool --upload-app --type ios --file build/artifacts/App.ipa --username "$APPLE_UPLOAD_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
+          
+    artifacts:
+      - mobile/build/artifacts/*.ipa
+      - mobile/build/artifacts/*dSYMs.zip
