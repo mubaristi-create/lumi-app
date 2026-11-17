@@ -14,7 +14,7 @@ permissions:
   contents: read
 jobs:
   archive:
-    runs-on: macos-15
+    runs-on: macos-15-intel
     environment: ios-release
     timeout-minutes: 45
     env:
@@ -82,8 +82,16 @@ jobs:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_P8_BASE64: ${{ secrets.ASC_P8_BASE64 }}
+          APPLE_ID: ${{ vars.APPLE_UPLOAD_ID }}
+          APPLE_UPLOAD_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
         run: |
           set -euo pipefail
+          if [[ -n "${APPLE_UPLOAD_PASSWORD:-}" ]]; then
+            : "${APPLE_ID:?Apple upload ID required}"
+            xcrun altool --validate-app --type ios --file mobile/build/artifacts/App.ipa --username "$APPLE_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
+            xcrun altool --upload-app --type ios --file mobile/build/artifacts/App.ipa --username "$APPLE_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
+            exit 0
+          fi
           : "${ASC_KEY_ID:?App Store Connect API key required}"
           : "${ASC_ISSUER_ID:?App Store Connect issuer required}"
           mkdir -p "$HOME/.appstoreconnect/private_keys"
