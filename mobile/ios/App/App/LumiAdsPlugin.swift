@@ -23,6 +23,15 @@ public class LumiAdsPlugin: CAPPlugin, CAPBridgedPlugin, BannerViewDelegate, Ful
     private var bannerRetry: DispatchWorkItem?
     private var retryAttempt = 0
     private var initCalls: [CAPPluginCall] = []
+    private var activeObserver: NSObjectProtocol?
+    public override func load() {
+        activeObserver = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification,
+            object: nil, queue: .main) { [weak self] _ in
+                guard let self = self, self.initialized else { return }
+                self.loadFullScreen(); if self.wanted { self.loadBanner() }
+            }
+    }
+    deinit { if let observer = activeObserver { NotificationCenter.default.removeObserver(observer) } }
     private var testMode: Bool { Bundle.main.object(forInfoDictionaryKey: "LumiTestAds") as? Bool ?? true }
     private func unit(_ type: String) -> String {
         if !testMode { return Bundle.main.object(forInfoDictionaryKey: "Lumi" + type + "Unit") as? String ?? "" }
@@ -78,7 +87,10 @@ public class LumiAdsPlugin: CAPPlugin, CAPBridgedPlugin, BannerViewDelegate, Ful
         if success { loadFullScreen(); if wanted { loadBanner() } }
     }
     @objc func preload(_ call: CAPPluginCall) {
-        DispatchQueue.main.async { self.loadFullScreen(); self.result(call, self.allowed ? "requested" : "consent_required") }
+        DispatchQueue.main.async {
+            self.loadFullScreen(); if self.wanted { self.loadBanner() }
+            self.result(call, self.allowed ? "requested" : "consent_required")
+        }
     }
     private func loadFullScreen() {
         guard allowed else { return }
