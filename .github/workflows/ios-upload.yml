@@ -46,7 +46,7 @@ jobs:
           run-id: ${{ inputs.source_run_id }}
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '26.0'
+          xcode-version: '26.6'
       - name: Check signed application identity
         shell: bash
         run: |
