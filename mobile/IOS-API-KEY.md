@@ -27,8 +27,9 @@ Release helper code is checked out separately from the manually dispatched trust
 Actions → iOS TestFlight archive → Run workflow → main → unique positive build_number → upload=true.
 Missing/invalid API secrets stop before npm install/archive.
 A local format check is not proof of Apple authorization; validation/upload must succeed.
-Upload-only recovery currently targets the previously selected run 44135967371/build 1; that old run never produced an IPA.
-Change the recovery artifact run/name/build checks to an actually successful signed archive before using recovery.
+Upload-only recovery asks for source_run_id and build_number. Select a run which actually produced a signed archive artifact; the artifact name and bundle build version must match.
+Before macOS allocation, the archive workflow uses a short-lived ES256 JWT for a read-only Apple API check of access to the configured app. It never logs the JWT or raw Apple response.
+On 2026-11-18 this real authorization check succeeded in run 44344442125 for build 3; archive/upload completion must be checked separately.
 
 ## Secret handling
 
