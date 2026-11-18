@@ -28,6 +28,20 @@ jobs:
         with:
           ref: 15e26664330db5e56f4fbe5ece7022b005c193dd
           persist-credentials: false
+      - name: Check out trusted release tools
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: release-tools
+          sparse-checkout: .github/scripts
+          persist-credentials: false
+      - name: Check API secret formats before building
+        if: inputs.upload
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: bash release-tools/.github/scripts/upload-testflight-api.sh --check
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -76,31 +90,16 @@ jobs:
           name: Lumi-iOS-TestFlight-${{ inputs.build_number }}
           path: mobile/build/artifacts/
           retention-days: 14
-      - name: Upload to TestFlight
+      - name: Validate and upload to TestFlight with API key
         if: inputs.upload
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-          ASC_P8_BASE64: ${{ secrets.ASC_P8_BASE64 }}
-          APPLE_ID: ${{ vars.APPLE_UPLOAD_ID }}
-          APPLE_UPLOAD_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-        run: |
-          set -euo pipefail
-          if [[ -n "${APPLE_UPLOAD_PASSWORD:-}" ]]; then
-            : "${APPLE_ID:?Apple upload ID required}"
-            xcrun altool --validate-app --type ios --file mobile/build/artifacts/App.ipa --username "$APPLE_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
-            xcrun altool --upload-app --type ios --file mobile/build/artifacts/App.ipa --username "$APPLE_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
-            exit 0
-          fi
-          : "${ASC_KEY_ID:?App Store Connect API key required}"
-          : "${ASC_ISSUER_ID:?App Store Connect issuer required}"
-          mkdir -p "$HOME/.appstoreconnect/private_keys"
-          printf '%s' "$ASC_P8_BASE64" | base64 --decode > "$HOME/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8"
-          xcrun altool --upload-app --type ios --file mobile/build/artifacts/App.ipa --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID"
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: bash release-tools/.github/scripts/upload-testflight-api.sh mobile/build/artifacts/App.ipa
       - name: Remove signing material
         if: always()
         run: |
           security delete-keychain "$RUNNER_TEMP/lumi-signing.keychain-db" || true
           rm -f "$RUNNER_TEMP/ios.p12" "$RUNNER_TEMP/ios.mobileprovision" "$RUNNER_TEMP/profile.plist"
-          rm -f "$HOME"/.appstoreconnect/private_keys/AuthKey_*.p8
           rm -f "$HOME/Library/MobileDevice/Provisioning Profiles"/*.mobileprovision
