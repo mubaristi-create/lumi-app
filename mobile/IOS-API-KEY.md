@@ -19,7 +19,7 @@ Developer is sufficient for build upload. This is not an In-App Purchase key, AP
 Download the .p8 only into a private location; never commit it or send it in chat.
 
 Existing Distribution P12/profile signing secrets remain required. API authentication does not sign the IPA.
-The archive workflow continues building immutable iOS source `15e26664330db5e56f4fbe5ece7022b005c193dd`.
+The archive workflow continues building immutable iOS source `6da961075581682f0f64f39358c343092a32e959`.
 Release helper code is checked out separately from the manually dispatched trusted main commit.
 
 ## Run
@@ -45,3 +45,7 @@ Existing App-Specific Password secrets are unused; revoke obsolete credentials t
 The unrelated optional Codemagic fallback is not configured by this GitHub migration.
 Neither this change nor its mock tests prove a signed iOS build or TestFlight upload succeeded.
 No Android/web application or Supabase data changes are included.
+
+## macOS Bash compatibility fix
+
+The release script must not expand an empty array under macOS Bash 3.2 with nounset. When Apple sign-in is disabled, it now passes an explicit empty CODE_SIGN_ENTITLEMENTS assignment; the enabled case still selects App/App.entitlements. Build 3 stopped before archive due to the empty-array error. Build 4/run 44349314513 uses the corrected source; check the run before claiming upload success.
