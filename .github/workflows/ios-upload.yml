@@ -9,10 +9,20 @@ jobs:
     runs-on: macos-26
     environment: ios-release
     timeout-minutes: 25
-    env:
-      APPLE_ID: ${{ vars.APPLE_UPLOAD_ID }}
-      APPLE_UPLOAD_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
     steps:
+      - name: Check out trusted release tools
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: release-tools
+          sparse-checkout: .github/scripts
+          persist-credentials: false
+      - name: Check API secret formats
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: bash release-tools/.github/scripts/upload-testflight-api.sh --check
       - uses: actions/download-artifact@v4
         with:
           name: Lumi-iOS-TestFlight-1
@@ -36,11 +46,9 @@ jobs:
           codesign -d --entitlements :- "$app" > entitlements.plist 2>/dev/null
           test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.developer.team-identifier' entitlements.plist)" = 248HG7USHB
           shasum -a 256 signed-build/App.ipa
-      - name: Validate and upload to App Store Connect
-        shell: bash
-        run: |
-          set -euo pipefail
-          : "${APPLE_ID:?Apple upload ID not configured}"
-          : "${APPLE_UPLOAD_PASSWORD:?App-specific password not configured}"
-          xcrun altool --validate-app --type ios --file signed-build/App.ipa --username "$APPLE_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
-          xcrun altool --upload-app --type ios --file signed-build/App.ipa --username "$APPLE_ID" --password '@env:APPLE_UPLOAD_PASSWORD'
+      - name: Validate and upload to App Store Connect with API key
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: bash release-tools/.github/scripts/upload-testflight-api.sh signed-build/App.ipa
