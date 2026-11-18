@@ -10,7 +10,8 @@ cd "$(dirname "$0")/.."
 [[ "$IOS_BUNDLE_ID" =~ ^[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+$ ]] || exit 1
 node scripts/prepare-ios.mjs
 mkdir -p build/artifacts
-entitlements=()
+# Keep at least one argument: macOS Bash 3.2 treats an empty array as unset under set -u.
+entitlements=(CODE_SIGN_ENTITLEMENTS=)
 if [[ "${IOS_APPLE_SIGN_IN:-false}" == true ]]; then
   /usr/libexec/PlistBuddy -c 'Set :LumiAppleSignInEnabled true' ios/App/App/Info.plist
   entitlements=(CODE_SIGN_ENTITLEMENTS=App/App.entitlements)
