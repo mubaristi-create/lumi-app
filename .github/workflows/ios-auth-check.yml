@@ -1,0 +1,26 @@
+name: Check iOS API authentication
+on:
+  push:
+    paths:
+      - '.github/scripts/**'
+      - '.github/workflows/ios-testflight.yml'
+      - '.github/workflows/ios-upload.yml'
+      - '.github/workflows/ios-auth-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check shell syntax and authentication behavior
+        run: |
+          bash -n .github/scripts/upload-testflight-api.sh
+          bash -n .github/scripts/test-testflight-api.sh
+          bash .github/scripts/test-testflight-api.sh
+      - name: Parse workflow YAML
+        run: ruby -ryaml -e 'ARGV.each { |p| YAML.load_file(p, aliases: true) }' .github/workflows/ios-testflight.yml .github/workflows/ios-upload.yml .github/workflows/ios-auth-check.yml
