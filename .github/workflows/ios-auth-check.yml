@@ -23,4 +23,5 @@ jobs:
           bash -n .github/scripts/test-testflight-api.sh
           bash .github/scripts/test-testflight-api.sh
       - name: Parse workflow YAML
-        run: ruby -ryaml -e 'ARGV.each { |p| YAML.load_file(p, aliases: true) }' .github/workflows/ios-testflight.yml .github/workflows/ios-upload.yml .github/workflows/ios-auth-check.yml
+        run: |
+          ruby -ryaml -e 'ARGV.each { |p| YAML.load_file(p, aliases: true) }' .github/workflows/ios-testflight.yml .github/workflows/ios-upload.yml .github/workflows/ios-auth-check.yml
