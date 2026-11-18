@@ -72,7 +72,7 @@ jobs:
           cache-dependency-path: mobile/package-lock.json
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '26.0'
+          xcode-version: '26.6'
       - name: Install locked dependencies
         working-directory: mobile
         run: npm ci
