@@ -49,3 +49,9 @@ No Android/web application or Supabase data changes are included.
 ## macOS Bash compatibility fix
 
 The release script must not expand an empty array under macOS Bash 3.2 with nounset. When Apple sign-in is disabled, it now passes an explicit empty CODE_SIGN_ENTITLEMENTS assignment; the enabled case still selects App/App.entitlements. Build 3 stopped before archive due to the empty-array error. Build 4/run 44349314513 uses the corrected source; check the run before claiming upload success.
+
+## Verified release — 2026-11-18
+
+Version 2.0.8 (build 6) archived, exported, validated and uploaded to Apple successfully with the team API key in [run 44354548052](https://github.com/mubaristi-create/lumi-app/actions/runs/44354548052). Signed IPA and dSYMs are in artifact `Lumi-iOS-TestFlight-6` (14-day retention). Apple processing/tester availability is separate from upload success.
+
+The archive and recovery workflows use `macos-15-intel` with Xcode `26.3`: the macOS 26 ARM runner pool failed to provision within 15 minutes, and an earlier Xcode 26.0 selection reported its iOS platform unavailable. App source remains pinned to `6da961075581682f0f64f39358c343092a32e959`. No Android, web application or Supabase production changes were made for these CI fixes.
