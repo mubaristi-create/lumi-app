@@ -13,7 +13,30 @@ on:
 permissions:
   contents: read
 jobs:
+  verify-api:
+    runs-on: ubuntu-latest
+    environment: ios-release
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        if: inputs.upload
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts
+      - uses: actions/setup-node@v4
+        if: inputs.upload
+        with:
+          node-version: '22'
+      - name: Verify Apple API authentication and app access
+        if: inputs.upload
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+          IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID }}
+        run: node .github/scripts/check-asc-api.mjs
   archive:
+    needs: verify-api
     runs-on: macos-26
     environment: ios-release
     timeout-minutes: 45
