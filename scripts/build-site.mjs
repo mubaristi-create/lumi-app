@@ -1,7 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
-const root=path.resolve(import.meta.dirname,'..'),out=path.join(root,'dist');
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=path.join(root,'dist');
 if(out!==path.join(root,'dist'))throw Error('Invalid artifact path');
 await fs.rm(out,{recursive:true,force:true});
 await fs.mkdir(out,{recursive:true});

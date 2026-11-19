@@ -21,7 +21,7 @@ class LumiBridgeViewController: CAPBridgeViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let webView = webView else { return }
-        // One native safe-area owner; CSS sees an already usable WebView viewport.
+        // Web content paints edge to edge; CSS owns content safe-area insets.
         let container = UIView(frame: view.bounds)
         container.backgroundColor = UIColor(red: 16/255, green: 6/255, blue: 9/255, alpha: 1)
         view = container
@@ -30,6 +30,7 @@ class LumiBridgeViewController: CAPBridgeViewController {
         webView.scrollView.bounces = false
         bannerSlot.translatesAutoresizingMaskIntoConstraints = false
         bannerSlot.clipsToBounds = true
+        bannerSlot.isHidden = true
         container.addSubview(webView); container.addSubview(bannerSlot)
         let safe = container.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
@@ -37,10 +38,10 @@ class LumiBridgeViewController: CAPBridgeViewController {
             bannerSlot.trailingAnchor.constraint(equalTo: safe.trailingAnchor),
             bannerSlot.bottomAnchor.constraint(equalTo: safe.bottomAnchor),
             bannerSlot.heightAnchor.constraint(equalToConstant: 90),
-            webView.topAnchor.constraint(equalTo: safe.topAnchor),
-            webView.leadingAnchor.constraint(equalTo: safe.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: safe.trailingAnchor),
-            webView.bottomAnchor.constraint(equalTo: bannerSlot.topAnchor)
+            webView.topAnchor.constraint(equalTo: container.topAnchor),
+            webView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: container.bottomAnchor)
         ])
         // The slot is permanent, including no-fill, consent and full-screen ad return.
     }

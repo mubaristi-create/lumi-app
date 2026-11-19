@@ -5,7 +5,15 @@ import {Browser} from '@capacitor/browser';
 import {StatusBar,Style} from '@capacitor/status-bar';
 import {installPush} from './push-client.js';
 if(Capacitor.isNativePlatform()){
- if(Capacitor.getPlatform()==='android')installPush();
+ const root=document.documentElement;root.dataset.lumiPlatform=Capacitor.getPlatform();
+ const gamePage=/\/(flappy|space-runner|merge9|fruit-ninja|silly-cat|blast-puzzle|eyo|tiles|daily-bonus|sudoku)\.html$/.test(location.pathname);
+ root.dataset.lumiGame=String(gamePage);if(Capacitor.getPlatform()==='ios'&&gamePage)root.style.setProperty('--lumi-banner-reserved','90px');
+ const nativeStyle=document.createElement('link');nativeStyle.rel='stylesheet';nativeStyle.href='lumi-mobile.css';document.head.append(nativeStyle);
+ const lifecycle=active=>root.classList.toggle('lumi-backgrounded',!active);
+ window.addEventListener('lumi:native-active',()=>lifecycle(true));window.addEventListener('lumi:native-background',()=>lifecycle(false));
+ document.addEventListener('visibilitychange',()=>lifecycle(!document.hidden));
+ // Delay until the native storage bridge is installed. iOS uses APNs device tokens.
+ queueMicrotask(()=>installPush(Capacitor.getPlatform(),window.LumiNativeAuthStorage).catch(()=>window.dispatchEvent(new Event('lumi:push-unavailable'))));
  if(['android','ios'].includes(Capacitor.getPlatform())){window.LumiNativePlatform=Capacitor.getPlatform();window.LumiNativeAuthStorage=registerPlugin('LumiAuthStorage');window.LumiNativeGameStorage=registerPlugin('LumiGameStorage');window.LumiNativeAds=registerPlugin('LumiNativeAds');window.LumiNativeAdsReady=window.LumiNativeAds.initialize().catch(()=>null);const retryAds=()=>window.LumiNativeAds.diagnostics().then(d=>{if(!d.initialized)return window.LumiNativeAds.initialize();if(Capacitor.getPlatform()==='ios')return window.LumiNativeAds.preload()}).catch(()=>null);window.addEventListener('online',retryAds);window.addEventListener('lumi:native-active',retryAds);window.LumiNativeAds.addListener('adDiagnostic',e=>window.dispatchEvent(new CustomEvent('lumi:ad-diagnostic',{detail:e}))).catch(()=>{});document.addEventListener('DOMContentLoaded',()=>{if(!/\/(flappy|space-runner|merge9|fruit-ninja|silly-cat|blast-puzzle|eyo|tiles|daily-bonus|sudoku)\.html$/.test(location.pathname))window.LumiNativeAds.hideBanner().catch(()=>{});window.LumiNativeAds.diagnostics().then(d=>{if(!d.debug)return;const slot=document.querySelector('#settings-dialog form');if(slot){const debug=document.createElement('button');debug.type='button';debug.textContent='Reklam diaqnostikası';debug.onclick=()=>window.LumiAds?.openDiagnostics();slot.append(debug)}}).catch(()=>{})});}
  if(Capacitor.getPlatform()==='ios'){
   const apple=registerPlugin('LumiAppleAuth');

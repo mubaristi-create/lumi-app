@@ -28,12 +28,12 @@ global.LumiTilesBridge={async create(Game){
    // A just-completed board is never held behind older pending runs.
    const complete=json=>{try{return JSON.parse(json).phase==='victory'}catch{return false}};items.sort((a,b)=>Number(complete(b[1]))-Number(complete(a[1])));
    for(const [run,json]of items){processed.set(run,json);try{
-    const g=Game.restore(json),result=await rpc('tiles_sync',{p_run:run,p_level:g.level,p_events:events(g)});state=result.state;confirmedRuns.set(run,json);
+    const g=Game.restore(json),direct=g.phase==='victory',result=direct?await rpc('tiles_complete_direct',{p_run:run,p_level:g.level,p_checkpoint:JSON.parse(json)}):await rpc('tiles_sync',{p_run:run,p_level:g.level,p_events:events(g)});state=result.state;confirmedRuns.set(run,json);
     if(!actor())return;
     const applied=global.LumiCloud.applyWalletSnapshot?.(result.state,uid);
     global.dispatchEvent(new CustomEvent('lumi:tiles-reward',{detail:{...result,runId:run}}));
     if(!applied&&(result.credited>0||Number(result.state?.balance)!==Number(global.LumiCloud.state.balance)))await global.LumiCloud.refreshWallet();
-    checkpoint(run,json,g,result);
+    if(direct){if(result.reward_status!=='daily_limit'&&queue[run]===json){delete queue[run];await persist()}}else checkpoint(run,json,g,result);
    }catch(error){failure=error;global.dispatchEvent(new CustomEvent('lumi:tiles-sync-pending',{detail:{runId:run,message:error.message,code:error.status===401||/daxil ol|session|jwt/i.test(error.message||'')?'auth':(error.name==='SyntaxError'||error.code==='P0001'||/Invalid|Corrupted|conflict|locked/i.test(error.message||''))&&!/rate|limit|tez|çox/i.test(error.message||'')?'validation':'network'}}))}}
   }if(failure)throw failure}finally{draining=false}
  }

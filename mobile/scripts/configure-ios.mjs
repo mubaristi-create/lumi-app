@@ -36,7 +36,7 @@ for(const [id,config] of Object.entries(objects.XCBuildConfiguration)){
  if(settings.PRODUCT_BUNDLE_IDENTIFIER){
   // Preserve the existing iOS identity until an Apple app registration exists.
   settings.PRODUCT_BUNDLE_IDENTIFIER='az.playlumio.app';
-  settings.MARKETING_VERSION='2.0.8';settings.CURRENT_PROJECT_VERSION='1';
+  settings.MARKETING_VERSION='2.0.10';settings.CURRENT_PROJECT_VERSION='1';
   settings.SWIFT_VERSION='5.0';settings.TARGETED_DEVICE_FAMILY='1';
   settings.OTHER_LDFLAGS='"$(inherited) -ObjC"';
  }

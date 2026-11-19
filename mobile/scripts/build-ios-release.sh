@@ -11,9 +11,11 @@ cd "$(dirname "$0")/.."
 node scripts/prepare-ios.mjs
 mkdir -p build/artifacts
 # Keep at least one argument: macOS Bash 3.2 treats an empty array as unset under set -u.
-entitlements=(CODE_SIGN_ENTITLEMENTS=)
+entitlements=(CODE_SIGN_ENTITLEMENTS=App/App.entitlements)
 if [[ "${IOS_APPLE_SIGN_IN:-false}" == true ]]; then
   /usr/libexec/PlistBuddy -c 'Set :LumiAppleSignInEnabled true' ios/App/App/Info.plist
+  /usr/libexec/PlistBuddy -c 'Add :com.apple.developer.applesignin array' ios/App/App/App.entitlements
+  /usr/libexec/PlistBuddy -c 'Add :com.apple.developer.applesignin:0 string Default' ios/App/App/App.entitlements
   entitlements=(CODE_SIGN_ENTITLEMENTS=App/App.entitlements)
 fi
 if [[ "${IOS_AD_MODE:-test}" == production ]]; then

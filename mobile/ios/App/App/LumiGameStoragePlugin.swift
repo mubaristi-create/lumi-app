@@ -14,7 +14,7 @@ public class LumiGameStoragePlugin: CAPPlugin, CAPBridgedPlugin {
     private let queue = DispatchQueue(label: "Lumi.game-storage")
     private func file(_ call: CAPPluginCall) throws -> URL {
         guard let key = call.getString("key"),
-              key.range(of: "^(sudoku-action|tiles-outbox|tiles-resume|tiles-progress|tiles-prefs):[a-zA-Z0-9-]{1,64}$", options: .regularExpression) != nil else {
+              key.range(of: "^(game-outbox|sudoku-action|tiles-outbox|tiles-resume|tiles-progress|tiles-prefs):[a-zA-Z0-9-]{1,64}$", options: .regularExpression) != nil else {
             throw NSError(domain: "LumiGameStorage", code: 1)
         }
         let fm = FileManager.default

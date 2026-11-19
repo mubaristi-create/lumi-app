@@ -32,6 +32,13 @@ public class LumiAdsPlugin: CAPPlugin, CAPBridgedPlugin, BannerViewDelegate, Ful
             }
     }
     deinit { if let observer = activeObserver { NotificationCenter.default.removeObserver(observer) } }
+    private var debugBuild: Bool {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }
     private var testMode: Bool { Bundle.main.object(forInfoDictionaryKey: "LumiTestAds") as? Bool ?? true }
     private func unit(_ type: String) -> String {
         if !testMode { return Bundle.main.object(forInfoDictionaryKey: "Lumi" + type + "Unit") as? String ?? "" }
@@ -121,12 +128,14 @@ public class LumiAdsPlugin: CAPPlugin, CAPBridgedPlugin, BannerViewDelegate, Ful
     @objc func hideBanner(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             self.wanted = false; self.banner?.isHidden = true
+            (self.bridge?.viewController as? LumiBridgeViewController)?.bannerSlot.isHidden = true
             self.bannerRetry?.cancel(); self.bannerRetry = nil
             self.result(call, "banner_hidden")
         }
     }
     private func loadBanner() {
         guard allowed, wanted, let host = bridge?.viewController as? LumiBridgeViewController else { return }
+        host.bannerSlot.isHidden = false
         host.view.layoutIfNeeded()
         let width = host.bannerSlot.bounds.width
         guard width >= 320, !unit("Banner").isEmpty else { return }
@@ -193,7 +202,7 @@ public class LumiAdsPlugin: CAPPlugin, CAPBridgedPlugin, BannerViewDelegate, Ful
     }
     @objc func diagnostics(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            call.resolve(["initialized": self.initialized, "testMode": self.testMode, "debug": self.testMode,
+            call.resolve(["initialized": self.initialized, "testMode": self.testMode, "debug": self.debugBuild,
                 "rewardedUnit": self.unit("Rewarded"), "interstitialReady": self.interstitial != nil && Date().timeIntervalSince(self.interAt) < 3500,
                 "rewardedReady": self.rewarded != nil && Date().timeIntervalSince(self.rewardAt) < 3500,
                 "bannerSlotDp": 90, "bannerVisible": self.banner?.window != nil && self.banner?.isHidden == false,

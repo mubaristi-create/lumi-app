@@ -1,6 +1,6 @@
 /* Non-auth game recovery only. Tokens continue to use LumiAuthStorage. */
 (function(g){'use strict';
-const valid=k=>/^(sudoku-action|tiles-outbox|tiles-resume|tiles-progress|tiles-prefs):[a-zA-Z0-9-]{1,64}$/.test(k);
+const valid=k=>/^(game-outbox|sudoku-action|tiles-outbox|tiles-resume|tiles-progress|tiles-prefs):[a-zA-Z0-9-]{1,64}$/.test(k);
 let dbPromise;const memory=new Map();
 function db(){return dbPromise||(dbPromise=new Promise((resolve,reject)=>{if(!g.indexedDB)return reject(Error('IndexedDB unavailable'));const r=g.indexedDB.open('lumi-game-recovery-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('records');r.onsuccess=()=>resolve(r.result);r.onerror=()=>{dbPromise=null;reject(r.error)};r.onblocked=()=>{dbPromise=null;reject(Error('Recovery database blocked'))}}))}
 async function idb(key,value,write){const d=await db();return new Promise((resolve,reject)=>{const tx=d.transaction('records',write?'readwrite':'readonly'),store=tx.objectStore('records'),r=write?(value===null?store.delete(key):store.put(value,key)):store.get(key);let found;r.onsuccess=()=>found=r.result;tx.oncomplete=()=>resolve(found??null);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||Error('Storage aborted'))})}

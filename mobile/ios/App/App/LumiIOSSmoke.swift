@@ -54,6 +54,35 @@ extension LumiBridgeViewController {
                         if let png = image.pngData() { try png.write(to: smokeDirectory().appendingPathComponent(file + ".png"), options: .atomic) }
                     }
                     output["pages"] = pages
+                    // Exercise the real embedded board in WKWebView without an account or rewards.
+                    guard let start = bridge?.config.appStartServerURL, let web = webView else { throw smokeError("Missing WebView") }
+                    web.load(URLRequest(url: start.deletingLastPathComponent().appendingPathComponent("tiles.html")))
+                    try await smokeWait("location.pathname.endsWith('tiles.html') && document.readyState==='complete' && document.querySelector('#tiles-app')?.children.length>0")
+                    output["twinMatch"] = try await smokeJS("""
+                        const source=await (await fetch('tiles-runtime.js')).text();
+                        const embedded=source.match(/const GAME_DOCUMENT=("(?:[^"\\\\]|\\\\.)*");/);
+                        if(!embedded)throw Error('Embedded board absent');
+                        for(let world=1;world<=10;world++){const image=new Image();image.src='tiles-assets/twin-match/world-'+world+'.jpg';await image.decode();if(Math.abs(image.naturalWidth/image.naturalHeight-2)>.02)throw Error('Atlas grid aspect mismatch');}
+                        const frame=document.createElement('iframe');frame.style.cssText='position:fixed;inset:0;width:100%;height:calc(100dvh - 90px - env(safe-area-inset-bottom));z-index:99999;border:0';document.body.append(frame);
+                        await new Promise(resolve=>{frame.onload=resolve;frame.srcdoc=JSON.parse(embedded[1])});
+                        for(let i=0;i<40&&!frame.contentDocument.querySelector('.mahjong-tile');i++)await new Promise(r=>setTimeout(r,100));
+                        const board=frame.contentDocument,tiles=[...board.querySelectorAll('.mahjong-tile')];if(tiles.length<2)throw Error('Board did not render');
+                        const open=tiles.filter(t=>t.getAttribute('aria-disabled')==='false');
+                        const first=open.find(t=>open.some(o=>o!==t&&o.dataset.art===t.dataset.art));
+                        if(!first)throw Error('No available pair');const second=open.find(t=>t!==first&&t.dataset.art===first.dataset.art);
+                        const visual=first.querySelector('.tile-raster'),style=frame.contentWindow.getComputedStyle(visual);
+                        if(!style.backgroundImage.includes('world-1.jpg')||style.backgroundSize!=='600% 300%')throw Error('Raster card style missing');
+                        first.click();second.click();await new Promise(r=>setTimeout(r,700));
+                        if(board.querySelectorAll('.mahjong-tile').length!==tiles.length-2)throw Error('Pair touch selection failed');
+                        return {atlasesDecoded:10,symbols:180,matchingPairRemoved:true,width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth};
+                        """)
+                    let twinImage: UIImage = try await withCheckedThrowingContinuation { continuation in
+                        web.takeSnapshot(with: nil) { image, error in
+                            if let image = image { continuation.resume(returning: image) }
+                            else { continuation.resume(throwing: error ?? self.smokeError("Snapshot unavailable")) }
+                        }
+                    }
+                    if let png = twinImage.pngData() { try png.write(to: smokeDirectory().appendingPathComponent("twin-match-board.png"), options: .atomic) }
                 }
                 output["ok"] = true
             } catch { output["error"] = String(describing: error) }

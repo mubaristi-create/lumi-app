@@ -2,16 +2,21 @@ import {PushNotifications} from '@capacitor/push-notifications';
 import {LocalNotifications} from '@capacitor/local-notifications';
 
 // Tokens stay in private server tables. Never place them in logs or URLs.
-export function installPush(){
- PushNotifications.createChannel({id:'lumi_updates',name:'Lumi bildirişləri',description:'Oyun, bonus və sıralama yenilikləri',importance:4,visibility:0,sound:'default'}).catch(()=>{});
- let token=null,registeredUser=null,install=localStorage.getItem('lumi-push-installation');
- if(!install){install=crypto.randomUUID();localStorage.setItem('lumi-push-installation',install)}
+export async function installPush(platform='android',nativeStorage=null){
+ if(platform==='android')PushNotifications.createChannel({id:'lumi_updates',name:'Lumi bildirişləri',description:'Oyun, bonus və sıralama yenilikləri',importance:4,visibility:0,sound:'default'}).catch(()=>{});
+ let token=null,registeredUser=null,install=null;
+ const storageKey='lumi-server-auth-v1-push-installation';
+ try{install=platform==='ios'?(await nativeStorage.getItem({key:storageKey})).value:localStorage.getItem('lumi-push-installation')}catch{}
+ if(!install){
+  install=crypto.randomUUID();
+  try{if(platform==='ios')await nativeStorage.setItem({key:storageKey,value:install});else localStorage.setItem('lumi-push-installation',install)}catch{window.dispatchEvent(new Event('lumi:push-unavailable'));return}
+ }
  const rpc=async(name,args)=>{const r=await window.LumiServer.client.rpc(name,args);if(r.error)throw r.error;return r.data};
  const bind=async()=>{
   if(!token||!window.LumiServer)return;
   const {data}=await window.LumiServer.client.auth.getSession();if(!data.session)return;
   const prefs=await rpc('lumi_notification_settings');if(!prefs.push_enabled)return;
-  await rpc('lumi_push_register',{p_token:token,p_installation:install});registeredUser=data.session.user.id;
+  await rpc('lumi_push_register',{p_token:token,p_installation:install,...(platform==='ios'?{p_platform:'ios'}:{})});registeredUser=data.session.user.id;
   await LocalNotifications.cancel({notifications:[{id:101},{id:102}]});
  };
  const safeBind=()=>bind().catch(()=>{});
