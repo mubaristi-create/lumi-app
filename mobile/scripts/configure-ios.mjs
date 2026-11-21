@@ -50,6 +50,8 @@ info.CFBundleURLTypes=[{CFBundleURLName:'Lumi Auth',CFBundleURLSchemes:['com.lum
 info.GADApplicationIdentifier='ca-app-pub-3940256099942544~1458002511';
 info.LumiTestAds=true;
 info.LumiAppleSignInEnabled=false;
+// The app uses OS-provided Keychain/WebCrypto and HTTPS, without a custom cipher.
+info.ITSAppUsesNonExemptEncryption=false;
 // Test-only initial integration. Production IDs + server allowlist need explicit setup.
 info.SKAdNetworkItems=[{SKAdNetworkIdentifier:'cstr6suwn9.skadnetwork'}];
 fs.writeFileSync(file,plist.build(info));
