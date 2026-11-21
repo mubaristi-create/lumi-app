@@ -1,14 +1,14 @@
 /* Native iOS owns only the banner overlay. CSS owns content safe areas. */
-html[data-lumi-platform="ios"] { --lumi-content-height:calc(100dvh - var(--lumi-banner-reserved,0px) - env(safe-area-inset-bottom,0px)); background:#100609; }
+html[data-lumi-platform="ios"] { --lumi-content-height:calc(100dvh - var(--lumi-banner-reserved,0px) - var(--lumi-safe-bottom,env(safe-area-inset-bottom,0px))); background:#100609; }
 html[data-lumi-platform="ios"] body { min-height:100dvh; width:100%; background:#100609; padding:0; }
 html[data-lumi-platform="ios"] .device { width:100%; max-width:none; min-height:100dvh; box-shadow:none; }
 html[data-lumi-platform="ios"] #welcome { height:100dvh; min-height:0; }
 html[data-lumi-platform="ios"][data-lumi-game="true"] body > main.app,
-html[data-lumi-platform="ios"][data-lumi-game="true"] body > main.game-app { height:var(--lumi-content-height); min-height:0; --lumi-vh:var(--lumi-content-height); padding-top:max(12px,env(safe-area-inset-top)); padding-bottom:12px; padding-left:max(12px,env(safe-area-inset-left)); padding-right:max(12px,env(safe-area-inset-right)); }
+html[data-lumi-platform="ios"][data-lumi-game="true"] body > main.game-app { height:var(--lumi-content-height); min-height:0; --lumi-vh:var(--lumi-content-height); padding-top:max(12px,var(--lumi-safe-top,env(safe-area-inset-top,0px))); padding-bottom:12px; padding-left:max(12px,var(--lumi-safe-left,env(safe-area-inset-left,0px))); padding-right:max(12px,var(--lumi-safe-right,env(safe-area-inset-right,0px))); }
 html[data-lumi-platform="ios"] .eyo-app { width:100%;max-width:none;min-height:var(--lumi-content-height); }
 html[data-lumi-platform="ios"] .eyo-app.play-mode { height:var(--lumi-content-height)!important;max-height:var(--lumi-content-height)!important;min-height:0!important; }
-html[data-lumi-platform="ios"] #app { width:100%;max-width:none;height:var(--lumi-content-height);max-height:none;min-height:0;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:12px; }
-html[data-lumi-platform="ios"] #app .board { width:min(100%,450px,calc(var(--lumi-content-height) - 290px - env(safe-area-inset-top))); }
+html[data-lumi-platform="ios"] #app { width:100%;max-width:none;height:var(--lumi-content-height);max-height:none;min-height:0;padding-top:max(12px,var(--lumi-safe-top,env(safe-area-inset-top,0px)));padding-bottom:12px; }
+html[data-lumi-platform="ios"] #app .board { width:min(100%,450px,calc(var(--lumi-content-height) - 290px - var(--lumi-safe-top,env(safe-area-inset-top,0px)))); }
 html[data-lumi-platform="ios"] #tiles-app { width:100%; max-width:none; }
 html[data-lumi-platform="ios"] #tiles-app .nav-scene,
 html[data-lumi-platform="ios"] #tiles-app .game-host { height:var(--lumi-content-height)!important; min-height:0!important; max-height:none; }
@@ -25,3 +25,12 @@ html[data-lumi-platform="ios"] .home-page { min-height:100dvh; }
 }
 @keyframes lumi-welcome-float { 0%,100% { transform:translate3d(0,0,0) rotate(-.3deg); } 50% { transform:translate3d(0,-6px,0) rotate(.3deg); } }
 @media(max-height:650px) { html[data-lumi-platform="ios"] .daily-app { gap:6px; } html[data-lumi-platform="ios"] .tap-stage { min-height:100px; max-height:30dvh; } }
+
+/* Keep the canvas anchored while the permanent native banner occupies its own area. */
+html[data-lumi-platform="ios"][data-lumi-game="true"] body { display:block; }
+html[data-lumi-platform="ios"] #welcome { box-sizing:border-box;padding-top:calc(var(--lumi-safe-top,env(safe-area-inset-top,0px)) + 12px);padding-bottom:calc(var(--lumi-safe-bottom,env(safe-area-inset-bottom,0px)) + 12px); }
+html[data-lumi-platform="ios"] #tiles-app .nav-ui { box-sizing:border-box;padding-top:calc(16px + var(--lumi-safe-top,env(safe-area-inset-top,0px))); }
+html[data-lumi-platform="ios"] #tiles-app .game-host { box-sizing:border-box;padding-top:var(--lumi-safe-top,env(safe-area-inset-top,0px)); }
+html[data-lumi-platform="ios"] #tiles-app .menu-mascot,html[data-lumi-platform="ios"] #tiles-app .map-guide { border-radius:24%; }
+html[data-lumi-platform="ios"] .eyo-header { height:calc(76px + var(--lumi-safe-top,env(safe-area-inset-top,0px)));padding-top:calc(10px + var(--lumi-safe-top,env(safe-area-inset-top,0px))); }
+html[data-lumi-platform="ios"] .play-mode .eyo-header { height:calc(62px + var(--lumi-safe-top,env(safe-area-inset-top,0px)));padding-top:calc(8px + var(--lumi-safe-top,env(safe-area-inset-top,0px))); }

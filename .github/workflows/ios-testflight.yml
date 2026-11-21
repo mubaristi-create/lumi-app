@@ -69,7 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: c3170c377727ce35be97308c8694c9718429f866
+          ref: daf0a778d2deb6cba247968c776d4e9590b8d372
           persist-credentials: false
       - name: Check out trusted release tools
         uses: actions/checkout@v4
