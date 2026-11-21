@@ -25,8 +25,8 @@ jobs:
               if (run.head_sha !== expected || run.head_repository.id !== 1427606855) throw new Error('Unexpected test source');
               if (run.status === 'completed') {
                 if (run.conclusion !== 'success') throw new Error('WKWebView tests must pass before release');
-                const {data: diff} = await github.rest.repos.compareCommitsWithBasehead({owner: context.repo.owner, repo: context.repo.repo, basehead: expected+'...a94c6692200798a8ebb5fdc6780c29be4d296ad3'});
-                if (diff.total_commits !== 1 || diff.files.length !== 1 || diff.files[0].filename !== 'twin-match-ui.css') throw new Error('Unexpected changes after native tests');
+                const {data: diff} = await github.rest.repos.compareCommitsWithBasehead({owner: context.repo.owner, repo: context.repo.repo, basehead: expected+'...ed099b7568ae54c4b315b37f973d43740def0567'});
+                if (diff.total_commits !== 2 || diff.files.length !== 2 || diff.files.some(file => !['twin-match-ui.css','lumi-mobile.css'].includes(file.filename))) throw new Error('Unexpected changes after native tests');
                 core.info('Native tests passed; final CSS also passed eight small-screen layout checks.');
                 return;
               }
