@@ -25,9 +25,9 @@ jobs:
               if (run.head_sha !== expected || run.head_repository.id !== 1427606855) throw new Error('Unexpected test source');
               if (run.status === 'completed') {
                 if (run.conclusion !== 'success') throw new Error('WKWebView tests must pass before release');
-                const {data: diff} = await github.rest.repos.compareCommitsWithBasehead({owner: context.repo.owner, repo: context.repo.repo, basehead: expected+'...200b63c0509ce4714c5ee949238f8514c9bc84b4'});
-                if (diff.total_commits !== 1 || diff.files.length !== 2 || diff.files.some(file => !['twin-match-cover.png','sw.js'].includes(file.filename))) throw new Error('Unexpected changes after native tests');
-                core.info('WKWebView source passed; only requested cover and cache version changed.');
+                const {data: diff} = await github.rest.repos.compareCommitsWithBasehead({owner: context.repo.owner, repo: context.repo.repo, basehead: expected+'...465b917dfc0a7749998e4dfbf0a14405a2139d1b'});
+                if (diff.total_commits !== 2 || diff.files.length !== 3 || diff.files.some(file => !['twin-match-cover.png','sw.js','styles.css'].includes(file.filename))) throw new Error('Unexpected changes after native tests');
+                core.info('WKWebView source passed; only requested cover, card styling and cache version changed.');
                 return;
               }
               core.info('Waiting for the existing simulator test.');
