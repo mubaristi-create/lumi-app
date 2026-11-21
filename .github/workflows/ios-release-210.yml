@@ -8,7 +8,7 @@ permissions:
   actions: read
 concurrency:
   group: lumi-ios-release-210
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -33,9 +33,11 @@ jobs:
             }
             throw new Error('Simulator test is still running; release was not started');
   release:
+    if: ${{ false }}
     needs: quality
     uses: ./.github/workflows/ios-testflight.yml
     with:
       build_number: '8'
       upload: true
     secrets: inherit
+
