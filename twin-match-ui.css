@@ -5,7 +5,7 @@
 #tiles-app .logo-text strong { font-size:clamp(44px,8dvh,70px); }
 #tiles-app .menu-tagline { flex-shrink:0;margin:8px 0 0;font-size:11px; }
 #tiles-app .menu-art { height:clamp(76px,14dvh,128px);min-height:0;flex:0 1 128px;margin:2px 0 6px; }
-#tiles-app .menu-mascot { height:100%;width:auto;max-width:44vw;max-height:128px;border-radius:20%;animation:none; }
+#tiles-app .menu-mascot { position:absolute;inset:0;margin:auto;height:100%;width:auto;max-width:44vw;max-height:100%;border-radius:20%;animation:none; }
 #tiles-app .decor-tile { max-height:65%;max-width:17%; }
 #tiles-app .menu-actions { position:relative;z-index:2;flex-shrink:0; }
 @media(max-height:690px) {
