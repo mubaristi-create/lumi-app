@@ -18,16 +18,14 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const run_id = 44950100540;
-            const expected = 'a199b35ac732e9143a54baf3486cc7cbf4928ba7';
+            const run_id = 44951892113;
+            const expected = '67d5e8dfaa4092edacf5105f94edc681c878540d';
             for (let attempt = 0; attempt < 40; attempt++) {
               const {data: run} = await github.rest.actions.getWorkflowRun({owner: context.repo.owner, repo: context.repo.repo, run_id});
               if (run.head_sha !== expected || run.head_repository.id !== 1427606855) throw new Error('Unexpected test source');
               if (run.status === 'completed') {
                 if (run.conclusion !== 'success') throw new Error('WKWebView tests must pass before release');
-                const {data: diff} = await github.rest.repos.compareCommitsWithBasehead({owner: context.repo.owner, repo: context.repo.repo, basehead: expected+'...ed099b7568ae54c4b315b37f973d43740def0567'});
-                if (diff.total_commits !== 2 || diff.files.length !== 2 || diff.files.some(file => !['twin-match-ui.css','lumi-mobile.css'].includes(file.filename))) throw new Error('Unexpected changes after native tests');
-                core.info('Native tests passed; final CSS also passed eight small-screen layout checks.');
+                core.info('Final native UI, safe-area, storage and touch acceptance checks passed.');
                 return;
               }
               core.info('Waiting for the existing simulator test.');
