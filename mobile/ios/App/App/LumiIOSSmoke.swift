@@ -47,6 +47,14 @@ extension LumiBridgeViewController {
                             const scene=document.querySelector('#tiles-app .nav-scene,#app'),rect=scene.getBoundingClientRect();
                             if(Math.abs(rect.top)>1||rect.bottom>innerHeight-90-bottom+1)throw Error('Content overlaps native banner or is vertically centered');
                             if(!(top>0&&bottom>=0))throw Error('UIKit safe insets unavailable');
+                            if(location.pathname.endsWith('tiles.html')){
+                              const art=document.querySelector('.menu-mascot'),play=document.querySelector('.nav-primary');
+                              await art.decode();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+                              const a=art.getBoundingClientRect(),b=play.getBoundingClientRect();
+                              if(a.bottom>b.top+1)throw Error('Menu artwork covers play control');
+                              const hit=document.elementFromPoint(b.left+b.width/2,b.top+b.height/2);
+                              if(!play.contains(hit))throw Error('Play control touch is obstructed');
+                            }
                             return {rendered:true,safeTop:top,safeBottom:bottom,contentBottom:rect.bottom,width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth};
                             """)
                         if var values = page as? [String: Any] { values["file"] = file; pages.append(values) }
