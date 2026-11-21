@@ -10,6 +10,14 @@ on:
         description: 'Upload signed test-ad build to TestFlight'
         default: false
         type: boolean
+  workflow_call:
+    inputs:
+      build_number:
+        required: true
+        type: string
+      upload:
+        default: false
+        type: boolean
 permissions:
   contents: read
 jobs:
@@ -17,6 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: ios-release
     timeout-minutes: 5
+    outputs:
+      build_number: ${{ steps.resolve.outputs.build_number || inputs.build_number }}
     steps:
       - uses: actions/checkout@v4
         if: inputs.upload
@@ -35,6 +45,16 @@ jobs:
           ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
           IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID }}
         run: node .github/scripts/check-asc-api.mjs
+      - name: Select unused build number
+        id: resolve
+        if: inputs.upload
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+          IOS_BUILD_NUMBER: ${{ inputs.build_number }}
+          IOS_RESOLVE_BUILD: 'true'
+        run: node .github/scripts/testflight-status.mjs
   archive:
     needs: verify-api
     runs-on: macos-15-intel
@@ -43,13 +63,13 @@ jobs:
     env:
       IOS_TEAM_ID: ${{ vars.IOS_TEAM_ID }}
       IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID }}
-      IOS_BUILD_NUMBER: ${{ inputs.build_number }}
+      IOS_BUILD_NUMBER: ${{ needs.verify-api.outputs.build_number }}
       IOS_AD_MODE: test
       IOS_APPLE_SIGN_IN: ${{ vars.IOS_APPLE_SIGN_IN || 'false' }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 334add39d795794799179d3ed9001b860a0df50a
+          ref: c3170c377727ce35be97308c8694c9718429f866
           persist-credentials: false
       - name: Check out trusted release tools
         uses: actions/checkout@v4
@@ -110,7 +130,7 @@ jobs:
         run: bash scripts/build-ios-release.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: Lumi-iOS-TestFlight-${{ inputs.build_number }}
+          name: Lumi-iOS-TestFlight-${{ needs.verify-api.outputs.build_number }}
           path: mobile/build/artifacts/
           retention-days: 14
       - name: Validate and upload to TestFlight with API key
@@ -120,6 +140,20 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
         run: bash release-tools/.github/scripts/upload-testflight-api.sh mobile/build/artifacts/App.ipa
+      - name: Confirm Apple processing and internal testing
+        if: inputs.upload
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+        run: node release-tools/.github/scripts/testflight-status.mjs
+      - name: Save TestFlight status
+        if: always() && inputs.upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lumi-TestFlight-status-${{ needs.verify-api.outputs.build_number }}
+          path: mobile/build/artifacts/TestFlight-status.json
+          if-no-files-found: ignore
       - name: Remove signing material
         if: always()
         run: |
