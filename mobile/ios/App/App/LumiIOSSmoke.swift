@@ -39,10 +39,15 @@ extension LumiBridgeViewController {
                         guard let start = bridge?.config.appStartServerURL, let web = webView else { throw smokeError("Missing WebView") }
                         web.load(URLRequest(url: start.deletingLastPathComponent().appendingPathComponent(file)))
                         try await smokeWait("location.pathname.endsWith('\(file)') && document.readyState==='complete' && (\(ready))")
+                        try await smokeWait("parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--lumi-safe-top'))>0")
                         let page = try await smokeJS("""
                             if(!CSS.supports('height','100dvh'))throw Error('Dynamic viewport unsupported');
                             if(typeof crypto.randomUUID!=='function')throw Error('UUID unavailable');
-                            return {rendered:true,width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth};
+                            const css=getComputedStyle(document.documentElement),top=parseFloat(css.getPropertyValue('--lumi-safe-top')),bottom=parseFloat(css.getPropertyValue('--lumi-safe-bottom'));
+                            const scene=document.querySelector('#tiles-app .nav-scene,#app'),rect=scene.getBoundingClientRect();
+                            if(Math.abs(rect.top)>1||rect.bottom>innerHeight-90-bottom+1)throw Error('Content overlaps native banner or is vertically centered');
+                            if(!(top>0&&bottom>=0))throw Error('UIKit safe insets unavailable');
+                            return {rendered:true,safeTop:top,safeBottom:bottom,contentBottom:rect.bottom,width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth};
                             """)
                         if var values = page as? [String: Any] { values["file"] = file; pages.append(values) }
                         let image: UIImage = try await withCheckedThrowingContinuation { continuation in
@@ -65,7 +70,7 @@ extension LumiBridgeViewController {
                         const encoded=source.slice(offset+marker.length).split(String.fromCharCode(10))[0].trim();
                         const embedded=JSON.parse(encoded.endsWith(';')?encoded.slice(0,-1):encoded);
                         for(let world=1;world<=10;world++){const image=new Image();image.src='tiles-assets/twin-match/world-'+world+'.jpg';await image.decode();if(Math.abs(image.naturalWidth/image.naturalHeight-2)>.02)throw Error('Atlas grid aspect mismatch');}
-                        const frame=document.createElement('iframe');frame.style.cssText='position:fixed;inset:0;width:100%;height:calc(100dvh - 90px - env(safe-area-inset-bottom));z-index:99999;border:0';document.body.append(frame);
+                        const frame=document.createElement('iframe');frame.style.cssText='position:fixed;inset:0;width:100%;height:calc(var(--lumi-content-height) - var(--lumi-safe-top,0px));top:var(--lumi-safe-top,0px);z-index:99999;border:0';document.body.append(frame);
                         await new Promise(resolve=>{frame.onload=resolve;frame.srcdoc=embedded});
                         for(let i=0;i<40&&!frame.contentDocument.querySelector('.mahjong-tile');i++)await new Promise(r=>setTimeout(r,100));
                         const board=frame.contentDocument,tiles=[...board.querySelectorAll('.mahjong-tile')];if(tiles.length<2)throw Error('Board did not render');
@@ -128,4 +133,3 @@ extension LumiBridgeViewController {
     private func smokeError(_ message: String) -> Error { NSError(domain: "LumiCISmoke", code: 1, userInfo: [NSLocalizedDescriptionKey: message]) }
 }
 #endif
-

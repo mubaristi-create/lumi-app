@@ -8,7 +8,7 @@ const app=path.join(mobile,'ios/App/App'),projectFile=path.join(mobile,'ios/App/
 const project=xcode.project(projectFile);project.parseSync();
 const objects=project.hash.project.objects;
 const group=project.findPBXGroupKey({path:'App'});
-for(const name of ['LumiBridgeViewController.swift','LumiAuthStoragePlugin.swift','LumiGameStoragePlugin.swift','LumiAdsPlugin.swift','LumiAppleAuthPlugin.swift','LumiIOSSmoke.swift']){
+for(const name of ['LumiLayoutPlugin.swift','LumiBridgeViewController.swift','LumiAuthStoragePlugin.swift','LumiGameStoragePlugin.swift','LumiAdsPlugin.swift','LumiAppleAuthPlugin.swift','LumiIOSSmoke.swift']){
  if(!project.hasFile(name))project.addSourceFile(name,{},group);
 }
 if(!project.hasFile('PrivacyInfo.xcprivacy')){const file=project.addFile('PrivacyInfo.xcprivacy',group,{lastKnownFileType:'text.xml'});file.uuid=project.generateUuid();project.addToPbxBuildFileSection(file);project.addToPbxResourcesBuildPhase(file);}

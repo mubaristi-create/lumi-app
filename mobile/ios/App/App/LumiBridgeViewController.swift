@@ -13,6 +13,7 @@ class LumiBridgeViewController: CAPBridgeViewController {
         #endif
     }
     override func capacitorDidLoad() {
+        bridge?.registerPluginInstance(LumiLayoutPlugin())
         bridge?.registerPluginInstance(LumiAuthStoragePlugin())
         bridge?.registerPluginInstance(LumiGameStoragePlugin())
         bridge?.registerPluginInstance(LumiAdsPlugin())
