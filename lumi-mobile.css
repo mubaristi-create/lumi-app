@@ -1,6 +1,6 @@
 /* Native iOS owns only the banner overlay. CSS owns content safe areas. */
 html[data-lumi-platform="ios"] { --lumi-content-height:calc(100dvh - var(--lumi-banner-reserved,0px) - var(--lumi-safe-bottom,env(safe-area-inset-bottom,0px))); background:#100609; }
-html[data-lumi-platform="ios"] body { min-height:100dvh; width:100%; background:#100609; padding:0; }
+html[data-lumi-platform="ios"] body { margin:0; min-height:100dvh; width:100%; background:#100609; padding:0; }
 html[data-lumi-platform="ios"] .device { width:100%; max-width:none; min-height:100dvh; box-shadow:none; }
 html[data-lumi-platform="ios"] #welcome { height:100dvh; min-height:0; }
 html[data-lumi-platform="ios"][data-lumi-game="true"] body > main.app,
