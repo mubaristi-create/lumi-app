@@ -1,0 +1,11 @@
+{
+  "platform": "ios",
+  "appId": "ca-app-pub-3669039231023564~1681486906",
+  "banner": "ca-app-pub-3669039231023564/1793167544",
+  "interstitial": "ca-app-pub-3669039231023564/4992552661",
+  "rewarded": "ca-app-pub-3669039231023564/7647682347",
+  "ssvCallback": "https://ubmcyzuhqrqdcpvebrzm.supabase.co/functions/v1/admob-ssv",
+  "unitsAndSsvConfigured": true,
+  "storeReviewRequired": true,
+  "testFlightDefault": "test"
+}

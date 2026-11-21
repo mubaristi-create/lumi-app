@@ -1,0 +1,71 @@
+name: Build iOS simulator app
+on:
+  push:
+    branches: ['ios-twin-match-210']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  simulator:
+    runs-on: macos-15-intel
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.3'
+      - name: Install packages
+        working-directory: mobile
+        run: npm ci
+      - name: Build unsigned simulator app
+        working-directory: mobile
+        run: bash scripts/build-ios-simulator.sh
+      - name: Boot and launch on simulator
+        run: |
+          set -euo pipefail
+          device=$(xcrun simctl list devices available -j | python3 -c 'import sys,json; d=json.load(sys.stdin); print(next(x["udid"] for group in d["devices"].values() for x in group if "iPhone" in x["name"]))')
+          xcrun simctl boot "$device" || true
+          xcrun simctl bootstatus "$device" -b
+          xcrun simctl install "$device" mobile/build/ios-simulator/Build/Products/Debug-iphonesimulator/App.app
+          xcrun simctl launch "$device" az.playlumio.app
+          sleep 8
+          xcrun simctl io "$device" screenshot mobile/build/artifacts/Lumi-iOS-launch.png
+          xcrun simctl terminate "$device" az.playlumio.app || true
+          xcrun simctl launch "$device" az.playlumio.app --lumi-smoke
+          container=$(xcrun simctl get_app_container "$device" az.playlumio.app data)
+          for n in {1..90}; do
+            [[ -f "$container/Documents/lumi-ci/smoke.json" ]] && break
+            sleep 1
+          done
+          cp -R "$container/Documents/lumi-ci" mobile/build/artifacts/
+          python3 -c 'import json; r=json.load(open("mobile/build/artifacts/lumi-ci/smoke.json")); print(r); assert r["ok"]'
+          xcrun simctl terminate "$device" az.playlumio.app || true
+          xcrun simctl launch "$device" az.playlumio.app --lumi-smoke-resume
+          for n in {1..30}; do
+            [[ -f "$container/Documents/lumi-ci/smoke-resume.json" ]] && break
+            sleep 1
+          done
+          cp "$container/Documents/lumi-ci/smoke-resume.json" mobile/build/artifacts/lumi-ci/
+          python3 -c 'import json; r=json.load(open("mobile/build/artifacts/lumi-ci/smoke-resume.json")); print(r); assert r["ok"]'
+      - name: Collect simulator diagnostics
+        if: always()
+        run: |
+          mkdir -p mobile/build/artifacts/diagnostics
+          device=$(xcrun simctl list devices booted -j | python3 -c 'import sys,json; d=json.load(sys.stdin); print(next((x["udid"] for group in d["devices"].values() for x in group if x["state"]=="Booted"),""))')
+          if [[ -n "$device" ]]; then
+            xcrun simctl spawn "$device" log show --last 5m --style compact --predicate 'process == "App"' > mobile/build/artifacts/diagnostics/app.log 2>&1 || true
+            container=$(xcrun simctl get_app_container "$device" az.playlumio.app data) || true
+            if [[ -d "$container/Documents/lumi-ci" ]]; then cp -R "$container/Documents/lumi-ci" mobile/build/artifacts/; fi
+          fi
+          find "$HOME/Library/Logs/DiagnosticReports" -name 'App-*.ips' -exec cp {} mobile/build/artifacts/diagnostics/ \; || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Lumi-iOS-2.0.10-simulator
+          path: mobile/build/artifacts/
+          retention-days: 14
