@@ -194,3 +194,8 @@ input:focus { border-color:#ffa832; box-shadow:0 0 0 3px #ffa83220; }
 
 @media(prefers-reduced-motion:no-preference){#welcome>.mascots img{animation:mascot-float 4s ease-in-out infinite;transform:translate3d(0,0,0)}}
 .lumi-backgrounded .mascots img{animation-play-state:paused!important}
+
+/* TWIN MATCH cover contains its own title; preserve the complete artwork. */
+.game-card.tiles-card { background:radial-gradient(ellipse at 50% 45%,#76004e,#28001e)!important; }
+.game-card.tiles-card img { position:static;width:100%;height:100%;object-fit:contain!important; }
+.game-card.tiles-card strong,.game-card.tiles-card small { display:none; }
