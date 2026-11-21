@@ -35,6 +35,7 @@ jobs:
             }
             throw new Error('Simulator test is still running; release was not started');
   release:
+    if: ${{ false }}
     needs: quality
     uses: ./.github/workflows/ios-testflight.yml
     with:
