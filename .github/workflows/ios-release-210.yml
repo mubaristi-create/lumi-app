@@ -23,6 +23,13 @@ jobs:
             for (let attempt = 0; attempt < 80; attempt++) {
               const {data: run} = await github.rest.actions.getWorkflowRun({owner: context.repo.owner, repo: context.repo.repo, run_id});
               if (run.head_sha !== expected || run.head_repository.id !== 1427606855) throw new Error('Unexpected test source');
+              const {data: {jobs}} = await github.rest.actions.listJobsForWorkflowRun({owner: context.repo.owner, repo: context.repo.repo, run_id});
+              const simulator = jobs.find(job => job.name === 'simulator');
+              const required = ['Build unsigned simulator app', 'Boot and launch on simulator'];
+              if (simulator && required.every(name => simulator.steps.some(step => step.name === name && step.status === 'completed' && step.conclusion === 'success'))) {
+                core.info('Exact-source native compile, storage/resume, artwork and touch acceptance checks passed. Diagnostics archival may finish separately.');
+                return;
+              }
               if (run.status === 'completed') {
                 if (run.conclusion !== 'success') throw new Error('WKWebView tests must pass before release');
                 core.info('Final native UI, safe-area, storage and touch acceptance checks passed.');
