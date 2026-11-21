@@ -34,3 +34,8 @@ html[data-lumi-platform="ios"] #tiles-app .game-host { box-sizing:border-box;pad
 html[data-lumi-platform="ios"] #tiles-app .menu-mascot,html[data-lumi-platform="ios"] #tiles-app .map-guide { border-radius:24%; }
 html[data-lumi-platform="ios"] .eyo-header { height:calc(76px + var(--lumi-safe-top,env(safe-area-inset-top,0px)));padding-top:calc(10px + var(--lumi-safe-top,env(safe-area-inset-top,0px))); }
 html[data-lumi-platform="ios"] .play-mode .eyo-header { height:calc(62px + var(--lumi-safe-top,env(safe-area-inset-top,0px)));padding-top:calc(8px + var(--lumi-safe-top,env(safe-area-inset-top,0px))); }
+html[data-lumi-platform="ios"] .home-page { padding-top:calc(var(--lumi-safe-top,env(safe-area-inset-top,0px)) + 24px);padding-bottom:calc(var(--lumi-safe-bottom,env(safe-area-inset-bottom,0px)) + 22px); }
+html[data-lumi-platform="ios"] .profile-page { box-sizing:border-box;padding-top:calc(var(--lumi-safe-top,env(safe-area-inset-top,0px)) + 20px);padding-bottom:calc(var(--lumi-safe-bottom,env(safe-area-inset-bottom,0px)) + 30px); }
+html[data-lumi-platform="ios"] .signup-page { padding-top:calc(var(--lumi-safe-top,env(safe-area-inset-top,0px)) + 106px);padding-bottom:calc(var(--lumi-safe-bottom,env(safe-area-inset-bottom,0px)) + 36px); }
+html[data-lumi-platform="ios"] .signup-page .mini-brand,html[data-lumi-platform="ios"] .signup-page .back-button { top:calc(var(--lumi-safe-top,env(safe-area-inset-top,0px)) + 20px); }
+html[data-lumi-platform="ios"] .play-mode .toast { top:calc(var(--lumi-safe-top,env(safe-area-inset-top,0px)) + 76px); }
