@@ -60,11 +60,13 @@ extension LumiBridgeViewController {
                     try await smokeWait("location.pathname.endsWith('tiles.html') && document.readyState==='complete' && document.querySelector('#tiles-app')?.children.length>0")
                     output["twinMatch"] = try await smokeJS("""
                         const source=await (await fetch('tiles-runtime.js')).text();
-                        const embedded=source.match(/const GAME_DOCUMENT=("(?:[^"\\\\]|\\\\.)*");/);
-                        if(!embedded)throw Error('Embedded board absent');
+                        const marker='const GAME_DOCUMENT=',offset=source.indexOf(marker);
+                        if(offset<0)throw Error('Embedded board absent');
+                        const encoded=source.slice(offset+marker.length).split(String.fromCharCode(10))[0].trim();
+                        const embedded=JSON.parse(encoded.endsWith(';')?encoded.slice(0,-1):encoded);
                         for(let world=1;world<=10;world++){const image=new Image();image.src='tiles-assets/twin-match/world-'+world+'.jpg';await image.decode();if(Math.abs(image.naturalWidth/image.naturalHeight-2)>.02)throw Error('Atlas grid aspect mismatch');}
                         const frame=document.createElement('iframe');frame.style.cssText='position:fixed;inset:0;width:100%;height:calc(100dvh - 90px - env(safe-area-inset-bottom));z-index:99999;border:0';document.body.append(frame);
-                        await new Promise(resolve=>{frame.onload=resolve;frame.srcdoc=JSON.parse(embedded[1])});
+                        await new Promise(resolve=>{frame.onload=resolve;frame.srcdoc=embedded});
                         for(let i=0;i<40&&!frame.contentDocument.querySelector('.mahjong-tile');i++)await new Promise(r=>setTimeout(r,100));
                         const board=frame.contentDocument,tiles=[...board.querySelectorAll('.mahjong-tile')];if(tiles.length<2)throw Error('Board did not render');
                         const open=tiles.filter(t=>t.getAttribute('aria-disabled')==='false');
@@ -126,3 +128,4 @@ extension LumiBridgeViewController {
     private func smokeError(_ message: String) -> Error { NSError(domain: "LumiCISmoke", code: 1, userInfo: [NSLocalizedDescriptionKey: message]) }
 }
 #endif
+
