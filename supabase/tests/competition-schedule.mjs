@@ -41,12 +41,18 @@ try{
  await q("select public.apply_verified_points($1,50,'test','schedule-gap')",[ids[1]]);
  ok(Number(await one('select points from public.lumi_week_scores where round_id=$1 and user_id=$2',[rid,ids[1]])),110);
  await one('select public.lumi_current_round()');ok(Number(await one('select count(*)from public.lumi_round_results where round_id=$1',[rid])),1);
+ await db.exec('set role authenticated');state=await rpc('overview');
+ await assert.rejects(()=>rpc('save',{version:state.schedule.version,round_id:null,title:'Too soon',starts_at:new Date(Date.now()+3600000).toISOString(),ends_at:new Date(Date.now()+7*86400000).toISOString(),gap_days:2,auto_repeat:true,enabled:true,reason:'Test minimum gap after finalization'}));checks++;
+ await db.exec('reset role');
  await db.exec(`set request.jwt.claim.sub='${ids[1]}';set role authenticated`);
  let platform=await one('select public.lumi_platform_state()');ok(platform.competition.status,'scheduled');ok(platform.round,null);
  await assert.rejects(()=>rpc('toggle',{enabled:true,reason:'Not admin'}));checks++;
  await db.exec('reset role');
  await q("update public.lumi_competition_schedule set starts_at=clock_timestamp()-interval '1 minute',ends_at=clock_timestamp()+interval '7 days'");
  const next=await one('select public.lumi_current_round()');assert(next!==rid);checks++;
+ await q('update public.lumi_rounds set prize_enabled=false where id=$1',[next]);
+ await db.exec(`set request.jwt.claim.sub='${ids[0]}';set role authenticated`);await rpc('toggle',{enabled:true,reason:'Test legacy disabled prize resume'});await db.exec('reset role');
+ ok(await one('select prize_enabled from public.lumi_rounds where id=$1',[next]),true);
  await q("select public.apply_verified_points($1,9,'test','schedule-new-round')",[ids[1]]);
  ok(Number(await one('select points from public.lumi_week_scores where round_id=$1 and user_id=$2',[next,ids[1]])),9);
  await db.exec('set role anon');await assert.rejects(()=>one("select public.lumi_admin_competition('overview')"));checks++;
