@@ -68,3 +68,5 @@
 
 /* Remove only the redundant top-three crowns; retain badges below names. */
 .lumi-podium{min-height:201px;margin-top:14px}.podium-player>img{margin-top:0}.podium-player>.rank-badges{margin:4px 0 2px;min-height:24px}
+
+.campaign-card[hidden],#weekly-progress[hidden]{display:none!important}

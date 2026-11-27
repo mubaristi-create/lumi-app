@@ -1,0 +1,55 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const {PGlite}=await import(process.env.EYO_PGLITE_MODULE);
+const db=new PGlite();let checks=0;
+const q=async(s,p=[])=>(await db.query(s,p)).rows;
+const one=async(s,p=[])=>Object.values((await q(s,p))[0])[0];
+const ok=(x,y)=>{assert.deepEqual(x,y);checks++};
+const ids=['00000000-0000-4000-8000-000000007701','00000000-0000-4000-8000-000000007702'];
+try{
+ await db.exec(fs.readFileSync('supabase/tests/eyo.mjs','utf8').match(/await db.exec\(`([\s\S]*?)`\);/)[1]);
+ await db.exec('alter table storage.objects add column owner_id text');
+ for(const name of fs.readdirSync('supabase/migrations').sort())await db.exec(fs.readFileSync('supabase/migrations/'+name,'utf8'));
+ for(let i=0;i<ids.length;i++)await q('insert into auth.users(id,email,email_confirmed_at,raw_user_meta_data)values($1,$2,now(),$3)',[ids[i],'schedule'+i+'@example.invalid',JSON.stringify({username:'schedule'+i})]);
+ await q('insert into public.admin_members(user_id)values($1)',[ids[0]]);
+ await db.exec(`set request.jwt.claim.sub='${ids[0]}';set request.jwt.claim.aal='aal1';set role authenticated`);
+ const rpc=(action,data={},request=crypto.randomUUID())=>one('select public.lumi_admin_competition($1,$2,$3)',[action,JSON.stringify(data),request]);
+ let state=await rpc('overview');const rid=state.round.id;
+ await db.exec('reset role');await q("select public.apply_verified_points($1,100,'test','schedule-initial')",[ids[1]]);
+ await db.exec('set role authenticated');
+ state=await rpc('toggle',{enabled:false,reason:'Test pause'});
+ await db.exec('reset role');await q("select public.apply_verified_points($1,30,'test','schedule-paused')",[ids[1]]);
+ ok(Number(await one('select points from public.lumi_week_scores where round_id=$1 and user_id=$2',[rid,ids[1]])),100);
+ ok(Number(await one('select balance from public.wallets where user_id=$1',[ids[1]])),130);
+ await db.exec('set role authenticated');await rpc('toggle',{enabled:true,reason:'Test resume'});
+ await db.exec('reset role');await q("select public.apply_verified_points($1,7,'test','schedule-resumed')",[ids[1]]);
+ // A Monday wallet rollover must not erase an ongoing custom campaign.
+ await q("update public.wallets set week_start=public.lumi_week_start()-interval '7 days' where user_id=$1",[ids[1]]);
+ await q("select public.apply_verified_points($1,3,'test','schedule-week-boundary')",[ids[1]]);
+ ok(Number(await one('select points from public.lumi_week_scores where round_id=$1 and user_id=$2',[rid,ids[1]])),110);
+ await db.exec('set role authenticated');state=await rpc('overview');
+ const save={version:state.schedule.version,round_id:rid,title:'Custom campaign',starts_at:state.round.starts_at,ends_at:new Date(Date.now()+3*86400000).toISOString(),gap_days:2,auto_repeat:true,enabled:true,reason:'Test dates'};
+ const request=crypto.randomUUID(),saved=await rpc('save',save,request);ok((await rpc('save',save,request)).schedule.version,saved.schedule.version);
+ await assert.rejects(()=>rpc('save',save));checks++;
+ await assert.rejects(()=>rpc('save',{...save,version:saved.schedule.version,starts_at:new Date(Date.now()-60000).toISOString()}));checks++;
+ await db.exec('reset role');
+ // End yesterday: finalize exactly once; remain in the two-day gap.
+ await q("update public.lumi_rounds set starts_at=clock_timestamp()-interval '8 days',ends_at=clock_timestamp()-interval '1 day'where id=$1",[rid]);
+ await q('update public.lumi_competition_schedule set starts_at=r.starts_at,ends_at=r.ends_at from public.lumi_rounds r where r.id=$1',[rid]);
+ ok(await one('select public.lumi_current_round()'),null);
+ ok(Number(await one('select count(*)from public.lumi_round_results where round_id=$1',[rid])),1);
+ await q("select public.apply_verified_points($1,50,'test','schedule-gap')",[ids[1]]);
+ ok(Number(await one('select points from public.lumi_week_scores where round_id=$1 and user_id=$2',[rid,ids[1]])),110);
+ await one('select public.lumi_current_round()');ok(Number(await one('select count(*)from public.lumi_round_results where round_id=$1',[rid])),1);
+ await db.exec(`set request.jwt.claim.sub='${ids[1]}';set role authenticated`);
+ let platform=await one('select public.lumi_platform_state()');ok(platform.competition.status,'scheduled');ok(platform.round,null);
+ await assert.rejects(()=>rpc('toggle',{enabled:true,reason:'Not admin'}));checks++;
+ await db.exec('reset role');
+ await q("update public.lumi_competition_schedule set starts_at=clock_timestamp()-interval '1 minute',ends_at=clock_timestamp()+interval '7 days'");
+ const next=await one('select public.lumi_current_round()');assert(next!==rid);checks++;
+ await q("select public.apply_verified_points($1,9,'test','schedule-new-round')",[ids[1]]);
+ ok(Number(await one('select points from public.lumi_week_scores where round_id=$1 and user_id=$2',[next,ids[1]])),9);
+ await db.exec('set role anon');await assert.rejects(()=>one("select public.lumi_admin_competition('overview')"));checks++;
+ await assert.rejects(()=>q('select *from public.lumi_competition_schedule'));checks++;
+ console.log('PASS',checks,'pause/resume, gap, rollover, date editing, idempotency, campaign-only scores and access control');
+}finally{await db.close()}

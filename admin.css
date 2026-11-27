@@ -21,3 +21,5 @@
 #campaign-preview{width:min(100%,320px);aspect-ratio:1;height:auto;max-height:none;object-fit:contain}#campaign-form small{display:block;margin-top:8px}
 @media(max-width:650px){.game-rule-card{grid-template-columns:76px minmax(0,1fr);padding:14px;gap:13px}.game-rule-heading img{width:70px;height:80px}.game-rule-heading h3{font-size:12px}.game-rule-fields{grid-template-columns:1fr}.game-rule-footer{align-items:flex-start;flex-direction:column;gap:8px}.eyo-player-row{flex-wrap:wrap;gap:10px}.eyo-player-row>div{flex-basis:65%}.eyo-player-row button{width:100%}}
 #campaign-preview{aspect-ratio:2/3;object-fit:cover;width:min(100%,240px)}
+
+.competition-editor form{display:grid;gap:16px;margin-top:20px}.competition-dates{display:grid;grid-template-columns:1fr 1fr;gap:16px}.competition-editor input[type=datetime-local]{color-scheme:dark;min-width:0;width:100%}.competition-editor label{min-width:0}.competition-editor>button{margin-top:12px}#competition-feedback:not(:empty){padding:12px;border:1px solid #ffd08a44;border-radius:10px}@media(max-width:650px){.competition-dates{grid-template-columns:1fr}.competition-editor button{width:100%}}
